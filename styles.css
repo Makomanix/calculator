@@ -1,0 +1,48 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+button {
+
+}
+
+.buttons {
+  display: flex;
+  flex-direction: row;
+}
+
+.button-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.numbers {
+
+}
+
+.symbols {
+
+}
+
+.power {
+
+}
+
+.clear {
+
+}
+
+.delete {
+
+}
+
+.tall {
+  flex-grow: 2;
+
+}
+
+.hover {
+
+}
+
