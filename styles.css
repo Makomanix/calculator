@@ -19,16 +19,19 @@ body {
   justify-content: center;
   align-items: center;
   background-color: black;
+  padding: .5rem;
+  border-radius: 20px;
 }
 
 .screen {
   display: flex;
   flex-direction: column;
-  height: 20%;
+  height: 15%;
   width: 90%;
   background-color: rgb(222, 235, 222);
-  margin-bottom: 1rem;
+  margin-bottom: 2rem;
   margin-top: 1rem;
+  border-radius: 5px;
 }
 
 .equation {
@@ -42,7 +45,7 @@ body {
 .solution {
 align-self: flex-end;
 height: 50%;
-font-size: x-large;
+font-size: xx-large;
 margin-right: 1rem;
 margin-top: .5rem;
 }
@@ -52,35 +55,34 @@ button {
   width: 100%;
   margin-top: 2%;
   margin-bottom: 2%;
+  font-size: x-large;
 }
 
 .buttons-grid {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   gap: .75rem;
-  height: 90%;
+  height: 75%;
   width: 90%;
   margin-bottom: 1rem;
 }
 
-.numbers {
+.number {
 
 }
 
-.symbols {
-
+.symbol {
+  background-color: rgba(27, 27, 250, 0.775);
+  color: white;
 }
 
-.power {
-
+.equal {
+  background-color: orange;
 }
 
-.clear {
-
-}
-
-.delete {
-
+.function {
+  background-color: slategray;
+  color: white;
 }
 
 button:nth-child(20) {
