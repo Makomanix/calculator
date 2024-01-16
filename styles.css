@@ -3,18 +3,42 @@
   padding: 0;
 }
 
-button {
+body {
+  height: 100vh;
+  width: full;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
+.calculator {
+  display: flex;
+  flex-direction: column;
+  height: 15rem;
+  width: 20rem;
+  justify-content: center;
+  align-items: stretch;
+}
+
+.screen {
+  height: 5rem;
+  width: 20rem;
+}
+
+button {
+  
 }
 
 .buttons {
   display: flex;
   flex-direction: row;
+  align-items: stretch;
 }
 
 .button-column {
   display: flex;
   flex-direction: column;
+  align-items: stretch;
 }
 
 .numbers {
