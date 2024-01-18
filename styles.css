@@ -86,6 +86,10 @@ button {
   color: white;
 }
 
+.power {
+  
+}
+
 button:nth-child(19) {
   grid-column: 4;
   grid-row: 4 / span 2;
