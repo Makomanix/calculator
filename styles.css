@@ -78,6 +78,7 @@ button {
 
 .equal {
   background-color: orange;
+  color: white;
 }
 
 .function {
@@ -85,15 +86,21 @@ button {
   color: white;
 }
 
+button:nth-child(19) {
+  grid-column: 4;
+  grid-row: 4 / span 2;
+}
+
 button:nth-child(20) {
   grid-column: 5;
   grid-row: 4 / span 2;
 }
 
-button:nth-child(19) {
-  grid-column: 4;
-  grid-row: 4 / span 2;
+button:nth-child(21) {
+  grid-column: span 2;
 }
+
+
 
 .hover {
 
