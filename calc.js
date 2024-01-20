@@ -4,6 +4,23 @@ const power = document.querySelector('.power');
 power.addEventListener('click', toggleOnOff);
 
 const buttons = document.querySelector('.buttons-grid');
+console.log(buttons);
+
+const buttonValues = document.querySelectorAll('button');
+buttonValueArray = Array.from(buttonValues).map((button) => {
+    return button.value;
+})
+
+console.log(buttonValueArray);
+
+
+
+
+
+
+
+// buttonArray = Array.from(buttons)
+// console.log(buttonArray)
 
 let onOff = false;
 
@@ -32,7 +49,7 @@ function deactivate() {
 };
 
 function handleClick(e){
-  handleButton(e.target.innerText);
+  handleButton(e.target.value);
 }
 
 function handlePress(e) {
@@ -43,8 +60,20 @@ function handleButton(value) {
   if ( isNaN(parseInt(value)) ) {
     console.log('symbol');
     console.log(value);
+    if (!(buttonValueArray.includes(value))) {
+        console.log(value)
+        return;
+    } else {
+        handleSymbol(value);
+    }
   } else {
     console.log('number')
     console.log(value);
   }
 }
+
+// function handleSymbol(symbol){
+//     switch(symbol) {
+//         case
+//     }
+// }
