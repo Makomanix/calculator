@@ -10,17 +10,9 @@ const buttonValues = document.querySelectorAll('button');
 buttonValueArray = Array.from(buttonValues).map((button) => {
     return button.value;
 })
+buttonValueArray.push("Enter");
 
 console.log(buttonValueArray);
-
-
-
-
-
-
-
-// buttonArray = Array.from(buttons)
-// console.log(buttonArray)
 
 let onOff = false;
 
@@ -50,6 +42,7 @@ function deactivate() {
 
 function handleClick(e){
   handleButton(e.target.value);
+  e.target.blur();
 }
 
 function handlePress(e) {
@@ -58,10 +51,8 @@ function handlePress(e) {
 
 function handleButton(value) {
   if ( isNaN(parseInt(value)) ) {
-    console.log('symbol');
-    console.log(value);
     if (!(buttonValueArray.includes(value))) {
-        console.log(value)
+        console.log("beat it loser", value)
         return;
     } else {
         handleSymbol(value);
@@ -72,8 +63,6 @@ function handleButton(value) {
   }
 }
 
-// function handleSymbol(symbol){
-//     switch(symbol) {
-//         case
-//     }
-// }
+function handleSymbol(symbol){
+  console.log("we made it", symbol);
+}
