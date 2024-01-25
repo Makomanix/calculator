@@ -3,43 +3,45 @@ document.addEventListener("keydown", toggleOnOff);
 const power = document.querySelector('.power');
 power.addEventListener('click', toggleOnOff);
 
-const buttons = document.querySelector('.buttons-grid');
-console.log(buttons);
+const equation = document.querySelector('.equation');
+// max length 30
 
-const buttonValues = document.querySelectorAll('button');
+const solution = document.querySelector('.solution');
+// max length 15 then use powers
 
-buttonValueArray = Array.from(buttonValues).map((button) => {
-    return button.value;
-});
-
-buttonValueArray.push("Enter");
-
-console.log(buttonValueArray);
 
 let onOff = false;
 
 function toggleOnOff(e) {
   if (e.key === "p" || e.target.innerText === 'Pow') {
     onOff ? onOff = false : onOff = true;
-    console.log(onOff)
     if (onOff == true) {
-            activate();
-        } else {
-            deactivate();
-        }
-    }    
+      activation(true);
+    } else {
+      activation(false);
+    }
+  }    
 };
 
-function activate() {
-  console.log('Power On');
-  buttons.addEventListener('click', handleClick);
-  document.addEventListener('keydown', handlePress);
-};
+function activation(bool) {
 
-function deactivate() {
-  console.log('Power Off');
-  buttons.removeEventListener('click', handleClick);
-  document.removeEventListener('keydown', handlePress);
+  const buttons = document.querySelector(".buttons-grid");
+
+  if (bool == true) {
+
+    console.log('Power On');
+    buttons.addEventListener('click', handleClick);
+    document.addEventListener('keydown', handlePress);
+    solution.innerText = '0'
+
+  } else if (bool == false) {
+
+    console.log("Power Off");
+    buttons.removeEventListener("click", handleClick);
+    document.removeEventListener("keydown", handlePress);
+    solution.innerText = "";
+    equation.innerText = "";
+  }
 };
 
 function handleClick(e){
@@ -53,11 +55,10 @@ function handlePress(e) {
 
 function handleButton(value) {
   if ( isNaN(parseInt(value)) && value != '.') {
-    if (!(buttonValueArray.includes(value))) {
-        console.log("beat it loser", value)
-        return;
+    if (getButtonValueArray(value)) {
+      return;
     } else {
-        handleSymbol(value);
+      handleSymbol(value);
     }
   } else {
     handleNumber(value);
@@ -65,28 +66,52 @@ function handleButton(value) {
 };
 
 function handleSymbol(symbol){
-  console.log("we made it", symbol);
-
+  
   switch (symbol) {
     case "=":
       break;
+
     case "+":
       break;
+
     case "-":
       break;
+
     case "/":
       break;
+
     case "*":
       break;
+
     case "^":
       break;
+
     case "!":
       break;
+
     case "√":
       break;
   }
 };
 
 function handleNumber(number) {
-  console.log("in number", number);
-}
+  solution.innerText = number;
+};
+
+function getButtonValueArray(value) {
+
+  const buttonValues = document.querySelectorAll('button');
+
+  buttonValueArray = Array.from(buttonValues).map((button) => {
+      return button.value;
+  });
+  
+  buttonValueArray.push("Enter");
+
+  if ( !(buttonValueArray.includes(value)) ) {
+    return true;
+  } else {
+    return false;
+  }
+
+};
