@@ -23,14 +23,12 @@ function activation(bool) {
 
   if (bool == true) {
 
-    console.log('Power On');
     buttons.addEventListener('click', handleClick);
     document.addEventListener('keydown', handlePress);
     solution.innerText = '0'
 
   } else if (bool == false) {
 
-    console.log("Power Off");
     buttons.removeEventListener("click", handleClick);
     document.removeEventListener("keydown", handlePress);
     solution.innerText = "";
@@ -65,26 +63,20 @@ function handleSymbol(symbol){
     case "=":
       break;
 
+    case "Backspace":
+      break;
+
+    case "Delete":
+      break;
+
     case "+":
-      break;
-
     case "-":
-      break;
-
     case "/":
-      break;
-
     case "*":
-      break;
-
     case "^":
-      break;
-
     case "!":
-      break;
-
     case "√":
-      break;
+      
   }
 };
 
@@ -109,7 +101,6 @@ function getButtonValueArray(value) {
   } else {
     return true;
   }
-
 };
 
 function init() {
@@ -117,7 +108,6 @@ function init() {
 
   const power = document.querySelector(".power");
   power.addEventListener("click", toggleOnOff);
-
 };
 
 init();
