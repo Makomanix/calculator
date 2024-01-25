@@ -1,14 +1,8 @@
-document.addEventListener("keydown", toggleOnOff);
-
-const power = document.querySelector('.power');
-power.addEventListener('click', toggleOnOff);
-
 const equation = document.querySelector('.equation');
 // max length 30
 
 const solution = document.querySelector('.solution');
 // max length 15 then use powers
-
 
 let onOff = false;
 
@@ -56,9 +50,9 @@ function handlePress(e) {
 function handleButton(value) {
   if ( isNaN(parseInt(value)) && value != '.') {
     if (getButtonValueArray(value)) {
-      return;
-    } else {
       handleSymbol(value);
+    } else {
+      return;
     }
   } else {
     handleNumber(value);
@@ -94,9 +88,11 @@ function handleSymbol(symbol){
   }
 };
 
+
 function handleNumber(number) {
   solution.innerText = number;
 };
+
 
 function getButtonValueArray(value) {
 
@@ -109,9 +105,19 @@ function getButtonValueArray(value) {
   buttonValueArray.push("Enter");
 
   if ( !(buttonValueArray.includes(value)) ) {
-    return true;
-  } else {
     return false;
+  } else {
+    return true;
   }
 
 };
+
+function init() {
+  document.addEventListener("keydown", toggleOnOff);
+
+  const power = document.querySelector(".power");
+  power.addEventListener("click", toggleOnOff);
+
+};
+
+init();
