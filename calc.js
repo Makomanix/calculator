@@ -7,9 +7,11 @@ const buttons = document.querySelector('.buttons-grid');
 console.log(buttons);
 
 const buttonValues = document.querySelectorAll('button');
+
 buttonValueArray = Array.from(buttonValues).map((button) => {
     return button.value;
-})
+});
+
 buttonValueArray.push("Enter");
 
 console.log(buttonValueArray);
@@ -29,13 +31,13 @@ function toggleOnOff(e) {
 };
 
 function activate() {
-  console.log('activated');
+  console.log('Power On');
   buttons.addEventListener('click', handleClick);
   document.addEventListener('keydown', handlePress);
 };
 
 function deactivate() {
-  console.log('deactivated');
+  console.log('Power Off');
   buttons.removeEventListener('click', handleClick);
   document.removeEventListener('keydown', handlePress);
 };
@@ -43,14 +45,14 @@ function deactivate() {
 function handleClick(e){
   handleButton(e.target.value);
   e.target.blur();
-}
+};
 
 function handlePress(e) {
   handleButton(e.key);
-}
+};
 
 function handleButton(value) {
-  if ( isNaN(parseInt(value)) ) {
+  if ( isNaN(parseInt(value)) && value != '.') {
     if (!(buttonValueArray.includes(value))) {
         console.log("beat it loser", value)
         return;
@@ -58,11 +60,33 @@ function handleButton(value) {
         handleSymbol(value);
     }
   } else {
-    console.log('number')
-    console.log(value);
+    handleNumber(value);
   }
-}
+};
 
 function handleSymbol(symbol){
   console.log("we made it", symbol);
+
+  switch (symbol) {
+    case "=":
+      break;
+    case "+":
+      break;
+    case "-":
+      break;
+    case "/":
+      break;
+    case "*":
+      break;
+    case "^":
+      break;
+    case "!":
+      break;
+    case "√":
+      break;
+  }
+};
+
+function handleNumber(number) {
+  console.log("in number", number);
 }
