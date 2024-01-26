@@ -90,7 +90,7 @@ function getButtonValueArray(value) {
 
   const buttonValues = document.querySelectorAll('button');
 
-  buttonValueArray = Array.from(buttonValues).map((button) => {
+  let buttonValueArray = Array.from(buttonValues).map((button) => {
       return button.value;
   });
   
