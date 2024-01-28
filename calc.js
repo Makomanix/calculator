@@ -23,6 +23,7 @@ function handlePress(e) {
 function handleButton(value) {
   if ( isNaN(parseInt(value)) && value != '.' ) {
     if (checkSymbol(value)) {
+      console.log('in handleButton')
       handleSymbol(value);
     } else {
       return;
@@ -35,19 +36,41 @@ function handleButton(value) {
 
 function checkSymbol(symbol) {
   console.log(symbol);
-  (!(buttonValueArray.includes(symbol))) ? false : true
+  return (!(buttonValueArray.includes(symbol))) ? false : true
 };
+console.log(buttonValueArray);
 
 function handleSymbol(symbol){
+
+  if (symbol == buffer.substring( buffer.length - 2, buffer.length - 1)) {
+    return;
+  }
   
   switch (symbol) {
-    case "=":
+    case "Enter":
+      console.log('hi equal');
+      if ( buffer == "0" || buffer == "" ) {
+        return;
+      } else {
+        memory = buffer
+      }
+      rerender();
       break;
       
     case "Backspace":
+      if ( buffer.substring(buffer.length -1, buffer.length) === " ") {
+        console.log("hi");
+        buffer = buffer.substring(0, buffer.length - 3)
+      } else {
+      buffer = buffer.substring(0, buffer.length - 1)
+      }
+      rerender();
       break;
         
     case "Delete":
+      buffer = '0';
+      memory = '';
+      rerender();
       break;
           
     case "+":
@@ -57,13 +80,18 @@ function handleSymbol(symbol){
     case "^":
     case "!":
     case "√":
+      lastOperator = symbol;
+      console.log("in handleSymbol")
+      buffer += ' ' +  symbol +  ' ' ;
+      rerender();
       break;
   }
 };
 
 
 function handleNumber(number) {
-  console.log(buffer)
+  console.log(buffer);
+  console.log(number);
   if (buffer === '0') {
     buffer = number;
   } else {
@@ -72,11 +100,13 @@ function handleNumber(number) {
   rerender();
 };
 
+// function 
+
 
 function rerender() {
   const solution = document.querySelector('.solution');
   // max length 15
-  const equation = documnet.querySelector('.equation');
+  const equation = document.querySelector('.equation');
   // max length 30
 
   if (onOff == false) {
@@ -89,6 +119,7 @@ function rerender() {
   } 
     
     solution.innerText = buffer;
+    equation.innerText = memory;
   
 };
 
