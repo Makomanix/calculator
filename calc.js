@@ -1,5 +1,6 @@
 let buffer = '';
 let memory = '';
+let bufferArray = [];
 let lastOperator = '';
 let equal = false;
 let onOff = false;
@@ -38,54 +39,70 @@ function checkSymbol(symbol) {
   console.log(symbol);
   return (!(buttonValueArray.includes(symbol))) ? false : true
 };
+
 console.log(buttonValueArray);
 
 function handleSymbol(symbol){
-
-  if (symbol == buffer.substring( buffer.length - 2, buffer.length - 1)) {
-    return;
-  }
   
   switch (symbol) {
-    case "Enter":
-      console.log('hi equal');
-      if ( buffer == "0" || buffer == "" ) {
-        return;
-      } else {
-        memory = buffer
-      }
-      rerender();
-      break;
-      
     case "Backspace":
       if ( buffer.substring(buffer.length -1, buffer.length) === " ") {
         console.log("hi");
         buffer = buffer.substring(0, buffer.length - 3)
       } else {
-      buffer = buffer.substring(0, buffer.length - 1)
+        buffer = buffer.substring(0, buffer.length - 1)
       }
+      bufferArray.pop();
       rerender();
       break;
-        
     case "Delete":
       buffer = '0';
       memory = '';
+      bufferArray = [];
       rerender();
+      break;
+  }
+
+  if (buffer.substring(buffer.length - 1) == ' ' && buffer.substring(buffer.length - 2) != '! ') {
+    return;
+  }
+  
+  switch (symbol) {
+    case "Enter":
+      if ( buffer == "0" || buffer == "" ) {
+        return;
+      } else {
+        memory = buffer + " ="
+        firstOperations(bufferArray);
+      }
+      // rerender();
       break;
           
     case "+":
     case "-":
     case "/":
     case "*":
-    case "^":
-    case "!":
-    case "√":
-      lastOperator = symbol;
-      console.log("in handleSymbol")
+      bufferArray.push(symbol);
       buffer += ' ' +  symbol +  ' ' ;
-      rerender();
+      // rerender()
+      break;
+    case "!":
+      bufferArray.push(symbol);
+      buffer += symbol + ' ';
+      // rerender();
+      break;
+    case "^":
+      bufferArray.push(symbol);
+      buffer += symbol;
+      // rerender();
+      break;
+    case "√":
+      bufferArray.push(symbol);
+      console.log("in handleSymbol")
+      // rerender();
       break;
   }
+  rerender();
 };
 
 
@@ -97,10 +114,44 @@ function handleNumber(number) {
   } else {
     buffer += number
   }
+  bufferArray.push(number)
   rerender();
 };
 
-// function 
+
+// find index of * and /
+// get -1 through +1 index of * /
+// operate and replace -1 through +1 index
+function firstOperations(array) {
+  console.log("start", array)
+  let division = array.indexOf('/');
+  let multiplication = array.indexOf('*');
+  console.log("before while", division, multiplication);
+  while (array.includes('*') || array.includes('/')) {
+    if(division < multiplication && division >= 0 || multiplication < 0) {
+      let formula = array.slice(division-1, division+2);
+      let answer = formula[0] / formula[2];
+      console.log(formula);
+      array.splice(division-1, 3, answer);
+      console.log("splice", array)
+    } else {
+      let formula = array.slice(multiplication-1, multiplication+2);
+      let answer = formula[0] * formula[2];
+      console.log(formula);
+      array.splice(multiplication-1, 3, answer);
+      console.log("splice", array)
+    }
+    division = array.indexOf('/');
+    multiplication = array.indexOf('*');
+    console.log("in while", division, multiplication);
+    
+  }
+} 
+
+function checkFactorial(array) {
+  
+};
+
 
 
 function rerender() {
@@ -120,6 +171,7 @@ function rerender() {
     
     solution.innerText = buffer;
     equation.innerText = memory;
+    console.log(bufferArray);
   
 };
 
