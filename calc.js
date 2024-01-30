@@ -122,7 +122,7 @@ function doOperations(array) {
   console.log("start", array)
   factorials(array);
   console.log(array);
-  exponent(array);
+  exponents(array);
   console.log(array);
   divideAndMultiply(array);
   console.log(array);
@@ -145,7 +145,7 @@ function factorials(array) {
   return array;
 };
 
-function exponent(array) {
+function exponents(array) {
   let carrot = array.indexOf('^');
 
   while (array.includes('^')) {
