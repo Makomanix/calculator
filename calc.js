@@ -1,7 +1,6 @@
 let buffer = '';
 let memory = '';
 let bufferArray = [];
-let lastOperator = '';
 let equal = false;
 let onOff = false;
 
@@ -24,7 +23,6 @@ function handlePress(e) {
 function handleButton(value) {
   if ( isNaN(parseInt(value)) && value != '.' ) {
     if (checkSymbol(value)) {
-      console.log('in handleButton')
       handleSymbol(value);
     } else {
       return;
@@ -55,6 +53,7 @@ function handleSymbol(symbol){
       bufferArray.pop();
       rerender();
       break;
+
     case "Delete":
       buffer = '0';
       memory = '';
@@ -63,8 +62,9 @@ function handleSymbol(symbol){
       break;
   }
 
-  if (buffer.substring(buffer.length - 1) == ' ' && buffer.substring(buffer.length - 2) != '! ') {
-    return;
+  if (buffer.substring(buffer.length - 1) == ' ' 
+      && buffer.substring(buffer.length - 2) != '! ') {
+      return;
   }
   
   switch (symbol) {
@@ -73,33 +73,31 @@ function handleSymbol(symbol){
         return;
       } else {
         memory = buffer + " ="
-        firstOperations(bufferArray);
+        doOperations(bufferArray);
       }
-      // rerender();
       break;
-          
+
     case "+":
     case "-":
     case "/":
     case "*":
       bufferArray.push(symbol);
-      buffer += ' ' +  symbol +  ' ' ;
-      // rerender()
+      buffer += ' ' +  symbol +  ' ' ;      
       break;
+
     case "!":
       bufferArray.push(symbol);
-      buffer += symbol + ' ';
-      // rerender();
+      buffer += symbol + ' ';      
       break;
+
     case "^":
       bufferArray.push(symbol);
-      buffer += symbol;
-      // rerender();
+      buffer += symbol;      
       break;
+
     case "√":
       bufferArray.push(symbol);
       console.log("in handleSymbol")
-      // rerender();
       break;
   }
   rerender();
@@ -119,37 +117,69 @@ function handleNumber(number) {
 };
 
 
-// find index of * and /
-// get -1 through +1 index of * /
-// operate and replace -1 through +1 index
-function firstOperations(array) {
+
+function doOperations(array) {
   console.log("start", array)
-  let division = array.indexOf('/');
-  let multiplication = array.indexOf('*');
-  console.log("before while", division, multiplication);
-  while (array.includes('*') || array.includes('/')) {
-    if(division < multiplication && division >= 0 || multiplication < 0) {
-      let formula = array.slice(division-1, division+2);
-      let answer = formula[0] / formula[2];
-      console.log(formula);
-      array.splice(division-1, 3, answer);
-      console.log("splice", array)
-    } else {
-      let formula = array.slice(multiplication-1, multiplication+2);
-      let answer = formula[0] * formula[2];
-      console.log(formula);
-      array.splice(multiplication-1, 3, answer);
-      console.log("splice", array)
-    }
-    division = array.indexOf('/');
-    multiplication = array.indexOf('*');
-    console.log("in while", division, multiplication);
-    
-  }
+  factorials(array);
+  console.log(array);
+  exponent(array);
+  console.log(array);
+  divideAndMultiply(array);
+  console.log(array);
 } 
 
-function checkFactorial(array) {
-  
+function factorials(array) {
+  let factorial = array.indexOf('!');
+
+  while (array.includes('!')) {
+    let number = array[factorial - 1];
+    console.log(number);
+    for (let i = (number - 1); i > 1; i--) {
+      number *= i;
+      console.log(number)
+    }
+    array.splice(factorial - 1, 2, number);
+    factorial = array.indexOf('!')
+  }
+  console.log(array);
+  return array;
+};
+
+function exponent(array) {
+  let carrot = array.indexOf('^');
+
+  while (array.includes('^')) {
+    let base = array[carrot - 1];
+    let power = array[carrot + 1];
+    
+    let answer = base ** power;
+    array.splice(carrot - 1, 3, answer)
+    carrot = array.indexOf('^');
+  }
+  return array;
+};
+
+function divideAndMultiply(array) {
+  let division = array.indexOf("/");
+  let multiplication = array.indexOf("*");
+  while (array.includes("*") || array.includes("/")) {
+
+    if ((division < multiplication && division >= 0) || multiplication < 0) {
+      let formula = array.slice(division - 1, division + 2);
+      let answer = formula[0] / formula[2];
+
+      array.splice(division - 1, 3, answer);
+
+    } else {
+      let formula = array.slice(multiplication - 1, multiplication + 2);
+      let answer = formula[0] * formula[2];
+
+      array.splice(multiplication - 1, 3, answer);
+    }
+    division = array.indexOf("/");
+    multiplication = array.indexOf("*");
+  }
+  return array;
 };
 
 
