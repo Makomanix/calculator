@@ -4,6 +4,7 @@ let bufferArray = [];
 let equal = false;
 let onOff = false;
 
+
 const buttonValues = document.querySelectorAll("button");
 
 let buttonValueArray = Array.from(buttonValues).map((button) => {
@@ -62,44 +63,47 @@ function handleSymbol(symbol){
       break;
   }
 
-  if (buffer.substring(buffer.length - 1) == ' ' 
-      && buffer.substring(buffer.length - 2) != '! ') {
-      return;
-  }
-  
-  switch (symbol) {
-    case "Enter":
-      if ( buffer == "0" || buffer == "" ) {
+  if (buffer.substring(buffer.length - 1) == ' '
+      && symbol == '√') {
+        bufferArray.push(symbol);
+        buffer += symbol;
+      } else if (
+        
+        bufferArray.length == 0
+        && buffer.substring(buffer.length - 2) != '! '){
         return;
-      } else {
-        memory = buffer + " ="
-        doOperations(bufferArray);
+
       }
-      break;
+  
+    switch (symbol) {
+      case "Enter":
+        if ( buffer == "0" || buffer == "" ) {
+          return;
+        } else {
+          memory = buffer + " ="
+          doOperations(bufferArray);
+        }
+        break;
 
-    case "+":
-    case "-":
-    case "/":
-    case "*":
-      bufferArray.push(symbol);
-      buffer += ' ' +  symbol +  ' ' ;      
-      break;
+      case "+":
+      case "-":
+      case "/":
+      case "*":
+        bufferArray.push(symbol);
+        buffer += ' ' +  symbol +  ' ' ;      
+        break;
 
-    case "!":
-      bufferArray.push(symbol);
-      buffer += symbol + ' ';      
-      break;
+      case "!":
+        bufferArray.push(symbol);
+        buffer += symbol + ' ';      
+        break;
 
-    case "^":
-      bufferArray.push(symbol);
-      buffer += symbol;      
-      break;
-
-    case "√":
-      bufferArray.push(symbol);
-      console.log("in handleSymbol")
-      break;
-  }
+      case "^":
+        bufferArray.push(symbol);
+        buffer += symbol;      
+        break;
+    }
+    
   rerender();
 };
 
@@ -124,6 +128,7 @@ function doOperations(array) {
   console.log(array);
   exponents(array);
   console.log(array);
+  squared(array);
   divideAndMultiply(array);
   console.log(array);
 } 
@@ -155,6 +160,20 @@ function exponents(array) {
     let answer = base ** power;
     array.splice(carrot - 1, 3, answer)
     carrot = array.indexOf('^');
+  }
+  return array;
+};
+
+function squared(array) {
+  let radical = array.indexOf('√');
+
+  while (array.includes('√')) {
+    let number = array[radical + 1]
+    let answer = Math.sqrt(number);
+
+    array.splice(radical + 1, 2, answer);
+
+    radical = array.indexOf('√');
   }
   return array;
 };
