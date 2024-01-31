@@ -42,6 +42,8 @@ function checkSymbol(symbol) {
 console.log(buttonValueArray);
 
 function handleSymbol(symbol){
+  console.log('Top handleSymbol', symbol);
+  console.log(buffer.substring(buffer.length - 1));
   
   switch (symbol) {
     case "Backspace":
@@ -64,9 +66,16 @@ function handleSymbol(symbol){
   }
 
   if (buffer.substring(buffer.length - 1) == ' '
+      || bufferArray.length == 0
       && symbol == '√') {
-        bufferArray.push(symbol);
-        buffer += symbol;
+        if (bufferArray.length == 0) {
+          bufferArray.push(symbol);
+          buffer = symbol;
+        } else {
+          console.log('if √ handleSymbol', symbol);
+          bufferArray.push(symbol);
+          buffer += symbol;
+        }
       } else if (
         
         bufferArray.length == 0
@@ -125,12 +134,12 @@ function handleNumber(number) {
 function doOperations(array) {
   console.log("start", array)
   factorials(array);
-  console.log(array);
+  // console.log(array);
   exponents(array);
-  console.log(array);
-  squared(array);
+  // console.log(array);
+  squareRoot(array);
   divideAndMultiply(array);
-  console.log(array);
+  // console.log(array);
 } 
 
 function factorials(array) {
@@ -164,14 +173,15 @@ function exponents(array) {
   return array;
 };
 
-function squared(array) {
+function squareRoot(array) {
   let radical = array.indexOf('√');
-
+  console.log('radical', radical);
   while (array.includes('√')) {
     let number = array[radical + 1]
     let answer = Math.sqrt(number);
-
-    array.splice(radical + 1, 2, answer);
+    console.log('number', number);
+    console.log('answer', answer);
+    array.splice(radical, 2, answer);
 
     radical = array.indexOf('√');
   }
@@ -212,6 +222,7 @@ function rerender() {
   if (onOff == false) {
     buffer = '';
     memory = '';
+    bufferArray = [];
   }  
   
   if (buffer === '' && onOff == true) {
