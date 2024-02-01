@@ -205,11 +205,6 @@ function divideAndMultiply(array) {
 };
 
 
-function conditionSquareRoot() {
-
-};
-
-
 function conditionBackspace() {
   
   if (preventSymbols()) {
