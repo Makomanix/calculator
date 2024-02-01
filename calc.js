@@ -41,80 +41,80 @@ function checkSymbol(symbol) {
 
 console.log(buttonValueArray);
 
-function handleSymbol(symbol){
-  console.log('Top handleSymbol', symbol);
-  console.log(buffer.substring(buffer.length - 1));
+// function handleSymbol(symbol){
   
-  switch (symbol) {
-    case "Backspace":
-      if ( buffer.substring(buffer.length -1, buffer.length) === " ") {
-        console.log("hi");
-        buffer = buffer.substring(0, buffer.length - 3)
-      } else {
-        buffer = buffer.substring(0, buffer.length - 1)
-      }
-      bufferArray.pop();
-      rerender();
-      break;
+//   switch (symbol) {
+//     case "Backspace":
+//       if ( buffer.substring(buffer.length -1, buffer.length) === " ") {
+//         console.log("hi");
+//         buffer = buffer.substring(0, buffer.length - 3)
+//       } else {
+//         buffer = buffer.substring(0, buffer.length - 1)
+//       }
+//       bufferArray.pop();
+//       rerender();
+//       console.log(bufferArray);
+//       console.log(buffer);
+//       break;
 
-    case "Delete":
-      buffer = '0';
-      memory = '';
-      bufferArray = [];
-      rerender();
-      break;
-  }
+//     case "Delete":
+//       buffer = '0';
+//       memory = '';
+//       bufferArray = [];
+//       rerender();
+//       break;
+//   }
 
-  if (buffer.substring(buffer.length - 1) == ' '
-      || bufferArray.length == 0
-      && symbol == '√') {
-        if (bufferArray.length == 0) {
-          bufferArray.push(symbol);
-          buffer = symbol;
-        } else {
-          console.log('if √ handleSymbol', symbol);
-          bufferArray.push(symbol);
-          buffer += symbol;
-        }
-      } else if (
+//   if (buffer.substring(buffer.length - 1) == ' '
+//       || bufferArray.length == 0
+//       && symbol == '√') {
+//         if (bufferArray.length == 0) {
+//           bufferArray.push(symbol);
+//           buffer = symbol;
+//         } else {
+//           console.log('if √ handleSymbol', symbol);
+//           bufferArray.push(symbol);
+//           buffer += symbol;
+//         }
+//       } else if (
         
-        bufferArray.length == 0
-        && buffer.substring(buffer.length - 2) != '! '){
-        return;
+//         bufferArray.length == 0
+//         && buffer.substring(buffer.length - 2) != '! '){
+//         return;
 
-      }
+//       }
   
-    switch (symbol) {
-      case "Enter":
-        if ( buffer == "0" || buffer == "" ) {
-          return;
-        } else {
-          memory = buffer + " ="
-          doOperations(bufferArray);
-        }
-        break;
+//     switch (symbol) {
+//       case "Enter":
+//         if ( buffer == "0" || buffer == "" ) {
+//           return;
+//         } else {
+//           memory = buffer + " ="
+//           doOperations(bufferArray);
+//         }
+//         break;
 
-      case "+":
-      case "-":
-      case "/":
-      case "*":
-        bufferArray.push(symbol);
-        buffer += ' ' +  symbol +  ' ' ;      
-        break;
+//       case "+":
+//       case "-":
+//       case "/":
+//       case "*":
+//         bufferArray.push(symbol);
+//         buffer += ' ' +  symbol +  ' ' ;      
+//         break;
 
-      case "!":
-        bufferArray.push(symbol);
-        buffer += symbol + ' ';      
-        break;
+//       case "!":
+//         bufferArray.push(symbol);
+//         buffer += symbol + ' ';      
+//         break;
 
-      case "^":
-        bufferArray.push(symbol);
-        buffer += symbol;      
-        break;
-    }
+//       case "^":
+//         bufferArray.push(symbol);
+//         buffer += symbol;      
+//         break;
+//     }
     
-  rerender();
-};
+//   rerender();
+// };
 
 
 function handleNumber(number) {
@@ -231,6 +231,8 @@ function rerender() {
     
     solution.innerText = buffer;
     equation.innerText = memory;
+    console.log('buffer', buffer);
+    console.log('last of buffer', buffer.substring(buffer.length - 1));
     console.log(bufferArray);
   
 };
@@ -273,3 +275,79 @@ function init() {
 };
 
 init();
+
+
+function handleSymbol(symbol){
+  
+  switch (symbol) {
+    case "Backspace":
+      if ( buffer.substring(buffer.length -1, buffer.length) === " ") {
+        console.log("hi");
+        buffer = buffer.substring(0, buffer.length - 3)
+      } else {
+        buffer = buffer.substring(0, buffer.length - 1)
+      }
+      bufferArray.pop();
+      rerender();
+      console.log(bufferArray);
+      console.log(buffer);
+      break;
+
+    case "Delete":
+      buffer = '0';
+      memory = '';
+      bufferArray = [];
+      rerender();
+      break;
+  }
+
+  if (buffer.substring(buffer.length - 1) == ' '
+      || bufferArray.length == 0
+      && symbol == '√') {
+        if (bufferArray.length == 0) {
+          bufferArray.push(symbol);
+          buffer = symbol;
+        } else {
+          console.log('if √ handleSymbol', symbol);
+          bufferArray.push(symbol);
+          buffer += symbol;
+        }
+      } else if (
+        
+        bufferArray.length == 0
+        && buffer.substring(buffer.length - 2) != '! '){
+        return;
+
+      }
+  
+    switch (symbol) {
+      case "Enter":
+        if ( buffer == "0" || buffer == "" ) {
+          return;
+        } else {
+          memory = buffer + " ="
+          doOperations(bufferArray);
+        }
+        break;
+
+      case "+":
+      case "-":
+      case "/":
+      case "*":
+        bufferArray.push(symbol);
+        buffer += ' ' +  symbol +  ' ' ;      
+        break;
+
+      case "!":
+        bufferArray.push(symbol);
+        buffer += symbol + ' ';      
+        break;
+
+      case "^":
+        bufferArray.push(symbol);
+        buffer += symbol;      
+        break;
+    }
+    
+  rerender();
+};
