@@ -245,6 +245,21 @@ function conditionBackspace() {
 };
 
 
+function preventSymbols() {
+  if (
+    buffer.substring(buffer.length - 2, buffer.length - 1) == "+" ||
+    buffer.substring(buffer.length - 2, buffer.length - 1) == "-" ||
+    buffer.substring(buffer.length - 2, buffer.length - 1) == "/" ||
+    buffer.substring(buffer.length - 2, buffer.length - 1) == "*" ||
+    buffer.substring(buffer.length - 1, buffer.length) == "√"
+  ) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+
 function rerender() {
   const solution = document.querySelector('.solution');
   // max length 15
@@ -277,6 +292,7 @@ function toggleOnOff(e) {
   }    
 };
 
+
 function activation(bool) {
   
   const buttons = document.querySelector(".buttons-grid");
@@ -296,6 +312,7 @@ function activation(bool) {
   }
 };
 
+
 function init() {
   document.addEventListener("keydown", toggleOnOff);
   
@@ -304,17 +321,3 @@ function init() {
 };
 
 init();
-
-function preventSymbols() {
-  if (
-      buffer.substring(buffer.length - 2, buffer.length - 1) == "+" ||
-        buffer.substring(buffer.length - 2, buffer.length - 1) == "-" ||
-        buffer.substring(buffer.length - 2, buffer.length - 1) == "/" ||
-        buffer.substring(buffer.length - 2, buffer.length - 1) == "*" ||
-        buffer.substring(buffer.length - 1, buffer.length ) == "√"
-  ) {
-    return true;
-  } else {
-    return false;
-  }
-}
