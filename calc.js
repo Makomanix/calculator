@@ -1,7 +1,7 @@
 let buffer = '';
 let memory = '';
 let bufferArray = [];
-let equal = false;
+let savedNumber = ''
 let onOff = false;
 
 
@@ -35,111 +35,100 @@ function handleButton(value) {
 
 
 function checkSymbol(symbol) {
-  console.log(symbol);
   return (!(buttonValueArray.includes(symbol))) ? false : true
 };
 
 console.log(buttonValueArray);
 
-// function handleSymbol(symbol){
+function handleSymbol(symbol){
+  if (savedNumber.length > 0) {
+    bufferArray.push(savedNumber);
+    savedNumber = '';
+  };
   
-//   switch (symbol) {
-//     case "Backspace":
-//       if ( buffer.substring(buffer.length -1, buffer.length) === " ") {
-//         console.log("hi");
-//         buffer = buffer.substring(0, buffer.length - 3)
-//       } else {
-//         buffer = buffer.substring(0, buffer.length - 1)
-//       }
-//       bufferArray.pop();
-//       rerender();
-//       console.log(bufferArray);
-//       console.log(buffer);
-//       break;
+  switch (symbol) {
+    case "Backspace":
+      conditionBackspace();
+      break;
 
-//     case "Delete":
-//       buffer = '0';
-//       memory = '';
-//       bufferArray = [];
-//       rerender();
-//       break;
-//   }
+    case "Delete":
+      buffer = '0';
+      memory = '';
+      bufferArray = [];
+      rerender();
+      break;
+  // }
 
-//   if (buffer.substring(buffer.length - 1) == ' '
-//       || bufferArray.length == 0
-//       && symbol == '√') {
-//         if (bufferArray.length == 0) {
-//           bufferArray.push(symbol);
-//           buffer = symbol;
-//         } else {
-//           console.log('if √ handleSymbol', symbol);
-//           bufferArray.push(symbol);
-//           buffer += symbol;
-//         }
-//       } else if (
+  // if (buffer.substring(buffer.length - 1) == ' '
+  //     || bufferArray.length == 0
+  //     && symbol == '√') {
+  //       if (bufferArray.length == 0) {
+  //         bufferArray.push(symbol);
+  //         buffer = symbol;
+  //       } else {
+  //         console.log('if √ handleSymbol', symbol);
+  //         bufferArray.push(symbol);
+  //         buffer += symbol;
+  //       }
+  //     } else if (
         
-//         bufferArray.length == 0
-//         && buffer.substring(buffer.length - 2) != '! '){
-//         return;
+  //       bufferArray.length == 0
+  //       && buffer.substring(buffer.length - 2) != '! '){
+  //       return;
 
-//       }
+  //     }
   
-//     switch (symbol) {
-//       case "Enter":
-//         if ( buffer == "0" || buffer == "" ) {
-//           return;
-//         } else {
-//           memory = buffer + " ="
-//           doOperations(bufferArray);
-//         }
-//         break;
+      case "Enter":
+        if ( buffer == "0" || buffer == "" ) {
+          return;
+        } else {
+          memory = buffer + " ="
+          doOperations(bufferArray);
+        }
+        break;
 
-//       case "+":
-//       case "-":
-//       case "/":
-//       case "*":
-//         bufferArray.push(symbol);
-//         buffer += ' ' +  symbol +  ' ' ;      
-//         break;
+      case "+":
+      case "-":
+      case "/":
+      case "*":
+        bufferArray.push(symbol);
+        buffer += ' ' +  symbol +  ' ' ;      
+        break;
 
-//       case "!":
-//         bufferArray.push(symbol);
-//         buffer += symbol + ' ';      
-//         break;
+      case "!":
+        bufferArray.push(symbol);
+        buffer += symbol + ' ';      
+        break;
 
-//       case "^":
-//         bufferArray.push(symbol);
-//         buffer += symbol;      
-//         break;
-//     }
+      case "^":
+        bufferArray.push(symbol);
+        buffer += symbol;      
+        break;
+    }
     
-//   rerender();
-// };
+  rerender();
+};
 
 
 function handleNumber(number) {
-  console.log(buffer);
-  console.log(number);
+
   if (buffer === '0') {
     buffer = number;
   } else {
     buffer += number
   }
-  bufferArray.push(number)
+  savedNumber += number;
+
   rerender();
 };
 
 
 
 function doOperations(array) {
-  console.log("start", array)
   factorials(array);
-  // console.log(array);
   exponents(array);
-  // console.log(array);
   squareRoot(array);
   divideAndMultiply(array);
-  // console.log(array);
 } 
 
 function factorials(array) {
@@ -147,15 +136,15 @@ function factorials(array) {
 
   while (array.includes('!')) {
     let number = array[factorial - 1];
-    console.log(number);
+    
     for (let i = (number - 1); i > 1; i--) {
       number *= i;
-      console.log(number)
+      
     }
     array.splice(factorial - 1, 2, number);
     factorial = array.indexOf('!')
   }
-  console.log(array);
+  
   return array;
 };
 
@@ -175,12 +164,11 @@ function exponents(array) {
 
 function squareRoot(array) {
   let radical = array.indexOf('√');
-  console.log('radical', radical);
+  
   while (array.includes('√')) {
     let number = array[radical + 1]
     let answer = Math.sqrt(number);
-    console.log('number', number);
-    console.log('answer', answer);
+
     array.splice(radical, 2, answer);
 
     radical = array.indexOf('√');
@@ -231,9 +219,6 @@ function rerender() {
     
     solution.innerText = buffer;
     equation.innerText = memory;
-    console.log('buffer', buffer);
-    console.log('last of buffer', buffer.substring(buffer.length - 1));
-    console.log(bufferArray);
   
 };
 
@@ -277,77 +262,49 @@ function init() {
 init();
 
 
-function handleSymbol(symbol){
-  
-  switch (symbol) {
-    case "Backspace":
-      if ( buffer.substring(buffer.length -1, buffer.length) === " ") {
-        console.log("hi");
-        buffer = buffer.substring(0, buffer.length - 3)
-      } else {
-        buffer = buffer.substring(0, buffer.length - 1)
-      }
-      bufferArray.pop();
-      rerender();
-      console.log(bufferArray);
-      console.log(buffer);
-      break;
 
-    case "Delete":
-      buffer = '0';
-      memory = '';
-      bufferArray = [];
-      rerender();
-      break;
+function conditionBackspace() {
+  
+  if (
+    buffer.substring(buffer.length - 2, buffer.length - 1) == "+" 
+    || buffer.substring(buffer.length - 2, buffer.length - 1) == "-" 
+    || buffer.substring(buffer.length - 2, buffer.length - 1) == "/" 
+    || buffer.substring(buffer.length - 2, buffer.length - 1) == "*"
+  ) {
+
+    buffer = buffer.substring(0, buffer.length - 3);
+    bufferArray.pop();
+
+  } else if (buffer.substring(buffer.length - 2, buffer.length - 1) == "!") {
+
+    buffer = buffer.substring(0, buffer.length - 2);
+    bufferArray.pop();
+    
+  } else {
+
+    let currentNumber;
+
+    if (bufferArray.length >= 1) {
+      currentNumber = bufferArray.pop();
+    }
+
+    if (currentNumber.length > 1 ) {
+      
+      currentNumber = currentNumber.substring(0, currentNumber.length - 1);
+      bufferArray.push(currentNumber);
+      buffer = buffer.substring(0, buffer.length - 1);
+
+    } else {
+
+    buffer = buffer.substring(0, buffer.length - 1);
+
+    }
   }
 
-  if (buffer.substring(buffer.length - 1) == ' '
-      || bufferArray.length == 0
-      && symbol == '√') {
-        if (bufferArray.length == 0) {
-          bufferArray.push(symbol);
-          buffer = symbol;
-        } else {
-          console.log('if √ handleSymbol', symbol);
-          bufferArray.push(symbol);
-          buffer += symbol;
-        }
-      } else if (
-        
-        bufferArray.length == 0
-        && buffer.substring(buffer.length - 2) != '! '){
-        return;
-
-      }
-  
-    switch (symbol) {
-      case "Enter":
-        if ( buffer == "0" || buffer == "" ) {
-          return;
-        } else {
-          memory = buffer + " ="
-          doOperations(bufferArray);
-        }
-        break;
-
-      case "+":
-      case "-":
-      case "/":
-      case "*":
-        bufferArray.push(symbol);
-        buffer += ' ' +  symbol +  ' ' ;      
-        break;
-
-      case "!":
-        bufferArray.push(symbol);
-        buffer += symbol + ' ';      
-        break;
-
-      case "^":
-        bufferArray.push(symbol);
-        buffer += symbol;      
-        break;
-    }
-    
   rerender();
 };
+
+
+// function conditionSquareRoot() {
+
+// };
