@@ -52,60 +52,60 @@ function handleSymbol(symbol){
       break;
 
     case "Delete":
-      buffer = '0';
-      memory = '';
+      buffer = "0";
+      memory = "";
       bufferArray = [];
       rerender();
       break;
-  // }
 
-  // if (buffer.substring(buffer.length - 1) == ' '
-  //     || bufferArray.length == 0
-  //     && symbol == '√') {
-  //       if (bufferArray.length == 0) {
-  //         bufferArray.push(symbol);
-  //         buffer = symbol;
-  //       } else {
-  //         console.log('if √ handleSymbol', symbol);
-  //         bufferArray.push(symbol);
-  //         buffer += symbol;
-  //       }
-  //     } else if (
-        
-  //       bufferArray.length == 0
-  //       && buffer.substring(buffer.length - 2) != '! '){
-  //       return;
+    case "Enter":
+      if (buffer == "0" || buffer == "") {
+        return;
+      } else {
+        memory = buffer + " =";
+        doOperations(bufferArray);
+      }
+      break;
 
-  //     }
-  
-      case "Enter":
-        if ( buffer == "0" || buffer == "" ) {
-          return;
-        } else {
-          memory = buffer + " ="
-          doOperations(bufferArray);
-        }
-        break;
+    case "+":
+    case "-":
+    case "/":
+    case "*":
+      if (buffer == "0" || buffer == "" || preventSymbols()) {
+        return;
+      }
 
-      case "+":
-      case "-":
-      case "/":
-      case "*":
+      bufferArray.push(symbol);
+      buffer += " " + symbol + " ";
+      break;
+
+    case "!":
+      if (buffer == "0" || buffer == "" || preventSymbols()) {
+        return;
+      }
+
+      bufferArray.push(symbol);
+      buffer += symbol + " ";
+      break;
+
+    case "^":
+      if (buffer == "0" || buffer == "" || preventSymbols()) {
+        return;
+      }
+      bufferArray.push(symbol);
+      buffer += symbol;
+      break;
+
+    case "√":
+      if (buffer == "0" || buffer == "") {
+        buffer = symbol;
+      } else if (buffer.substring(buffer.length - 1) == " ") {
+        buffer += symbol;
         bufferArray.push(symbol);
-        buffer += ' ' +  symbol +  ' ' ;      
-        break;
+      }
+      break;
+  }
 
-      case "!":
-        bufferArray.push(symbol);
-        buffer += symbol + ' ';      
-        break;
-
-      case "^":
-        bufferArray.push(symbol);
-        buffer += symbol;      
-        break;
-    }
-    
   rerender();
 };
 
@@ -125,10 +125,15 @@ function handleNumber(number) {
 
 
 function doOperations(array) {
+  console.log(array);
   factorials(array);
+  console.log(array);
   exponents(array);
+  console.log(array);
   squareRoot(array);
+  console.log(array);
   divideAndMultiply(array);
+  console.log(array);
 } 
 
 function factorials(array) {
@@ -200,6 +205,45 @@ function divideAndMultiply(array) {
 };
 
 
+function conditionSquareRoot() {
+
+};
+
+
+function conditionBackspace() {
+  
+  if (preventSymbols()) {
+
+    buffer = buffer.substring(0, buffer.length - 3);
+    bufferArray.pop();
+
+  } else if (buffer.substring(buffer.length - 2, buffer.length - 1) == "!") {
+
+    buffer = buffer.substring(0, buffer.length - 2);
+    bufferArray.pop();
+    
+  } else {
+
+    let currentNumber;
+
+    if (bufferArray.length >= 1) {
+      currentNumber = bufferArray.pop();
+    }
+
+    if (currentNumber.length > 1 ) {
+
+      currentNumber = currentNumber.substring(0, currentNumber.length - 1);
+      bufferArray.push(currentNumber);
+      buffer = buffer.substring(0, buffer.length - 1);
+
+    } else {
+      buffer = buffer.substring(0, buffer.length - 1);
+    }
+  }
+
+  rerender();
+};
+
 
 function rerender() {
   const solution = document.querySelector('.solution');
@@ -219,8 +263,8 @@ function rerender() {
     
     solution.innerText = buffer;
     equation.innerText = memory;
-  
 };
+
 
 function toggleOnOff(e) {
   if (e.key === "p" || e.target.innerText === 'Pow') {
@@ -261,50 +305,16 @@ function init() {
 
 init();
 
-
-
-function conditionBackspace() {
-  
+function preventSymbols() {
   if (
-    buffer.substring(buffer.length - 2, buffer.length - 1) == "+" 
-    || buffer.substring(buffer.length - 2, buffer.length - 1) == "-" 
-    || buffer.substring(buffer.length - 2, buffer.length - 1) == "/" 
-    || buffer.substring(buffer.length - 2, buffer.length - 1) == "*"
+      buffer.substring(buffer.length - 2, buffer.length - 1) == "+" ||
+        buffer.substring(buffer.length - 2, buffer.length - 1) == "-" ||
+        buffer.substring(buffer.length - 2, buffer.length - 1) == "/" ||
+        buffer.substring(buffer.length - 2, buffer.length - 1) == "*" ||
+        buffer.substring(buffer.length - 1, buffer.length ) == "√"
   ) {
-
-    buffer = buffer.substring(0, buffer.length - 3);
-    bufferArray.pop();
-
-  } else if (buffer.substring(buffer.length - 2, buffer.length - 1) == "!") {
-
-    buffer = buffer.substring(0, buffer.length - 2);
-    bufferArray.pop();
-    
+    return true;
   } else {
-
-    let currentNumber;
-
-    if (bufferArray.length >= 1) {
-      currentNumber = bufferArray.pop();
-    }
-
-    if (currentNumber.length > 1 ) {
-      
-      currentNumber = currentNumber.substring(0, currentNumber.length - 1);
-      bufferArray.push(currentNumber);
-      buffer = buffer.substring(0, buffer.length - 1);
-
-    } else {
-
-    buffer = buffer.substring(0, buffer.length - 1);
-
-    }
+    return false;
   }
-
-  rerender();
-};
-
-
-// function conditionSquareRoot() {
-
-// };
+}
