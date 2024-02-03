@@ -64,7 +64,8 @@ function handleSymbol(symbol){
       } else {
         memory = buffer + " =";
         doOperations(bufferArray);
-        buffer = bufferArray[0].toString();
+        console.log(bufferArray[0]);
+        buffer = bufferArray[0];
       }
       break;
 
@@ -200,6 +201,7 @@ function divideAndMultiply(array) {
     } else {
       let formula = array.slice(multiplication - 1, multiplication + 2);
       let answer = formula[0] * formula[2];
+      answer = answer.toString();
       
       array.splice(multiplication - 1, 3, answer);
     }
@@ -217,7 +219,8 @@ function addAndSubtract(array) {
   while (array.includes("+") || array.includes("-")) {
     if ((plus < minus && plus >= 0) || minus < 0) {
       let formula = array.slice(plus - 1, plus + 2);
-      let answer = (parseInt(formula[0]) + parseInt(formula[2]));
+      let answer = (parseFloat(formula[0]) + parseFloat(formula[2]));
+      answer = answer.toString();
 
       array.splice(plus - 1, 3, answer);
     } else {
