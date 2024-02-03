@@ -64,6 +64,7 @@ function handleSymbol(symbol){
       } else {
         memory = buffer + " =";
         doOperations(bufferArray);
+        buffer = bufferArray[0].toString();
       }
       break;
 
@@ -134,6 +135,8 @@ function doOperations(array) {
   console.log(array);
   divideAndMultiply(array);
   console.log(array);
+  addAndSubtract(array);
+  console.log(array);
 } 
 
 function factorials(array) {
@@ -181,25 +184,50 @@ function squareRoot(array) {
   return array;
 };
 
+
+
 function divideAndMultiply(array) {
   let division = array.indexOf("/");
   let multiplication = array.indexOf("*");
   while (array.includes("*") || array.includes("/")) {
-
+    
     if ((division < multiplication && division >= 0) || multiplication < 0) {
       let formula = array.slice(division - 1, division + 2);
       let answer = formula[0] / formula[2];
-
+      
       array.splice(division - 1, 3, answer);
-
+      
     } else {
       let formula = array.slice(multiplication - 1, multiplication + 2);
       let answer = formula[0] * formula[2];
-
+      
       array.splice(multiplication - 1, 3, answer);
     }
     division = array.indexOf("/");
     multiplication = array.indexOf("*");
+  }
+  return array;
+};
+
+
+function addAndSubtract(array) {
+  let plus = array.indexOf("+");
+  let minus = array.indexOf("-");
+
+  while (array.includes("+") || array.includes("-")) {
+    if ((plus < minus && plus >= 0) || minus < 0) {
+      let formula = array.slice(plus - 1, plus + 2);
+      let answer = (parseInt(formula[0]) + parseInt(formula[2]));
+
+      array.splice(plus - 1, 3, answer);
+    } else {
+      let formula = array.slice(minus - 1, minus + 2);
+      let answer = formula[0] - formula[2];
+
+      array.splice(minus - 1, 3, answer);
+    }
+    plus = array.indexOf("+");
+    minus = array.indexOf("-");
   }
   return array;
 };
@@ -273,6 +301,8 @@ function rerender() {
     
     solution.innerText = buffer;
     equation.innerText = memory;
+
+    console.log(buffer)
 };
 
 
