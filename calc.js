@@ -104,6 +104,7 @@ function handleSymbol(symbol){
     case "√":
       if (buffer == "0" || buffer == "") {
         buffer = symbol;
+        bufferArray.push(symbol);
       } else if (buffer.substring(buffer.length - 1) == " ") {
         buffer += symbol;
         bufferArray.push(symbol);
@@ -130,17 +131,17 @@ function handleNumber(number) {
 
 
 function doOperations(array) {
-  console.log(array);
+  // console.log(array);
   factorials(array);
-  console.log(array);
+  // console.log(array);
   exponents(array);
-  console.log(array);
+  // console.log(array);
   squareRoot(array);
-  console.log(array);
+  // console.log(array);
   divideAndMultiply(array);
-  console.log(array);
+  // console.log(array);
   addAndSubtract(array);
-  console.log(array);
+  // console.log(array);
 } 
 
 function factorials(array) {
@@ -179,10 +180,14 @@ function exponents(array) {
 
 function squareRoot(array) {
   let radical = array.indexOf('√');
+  console.log('hello');
+  console.log(array);
   
   while (array.includes('√')) {
     let number = array[radical + 1]
+    console.log('number', number)
     let answer = Math.sqrt(number);
+    console.log('answer', answer)
     answer = answer.toString();
 
     array.splice(radical, 2, answer);
@@ -197,8 +202,9 @@ function squareRoot(array) {
 function divideAndMultiply(array) {
   let division = array.indexOf("/");
   let multiplication = array.indexOf("*");
+  // let symbol = "divide";
   while (array.includes("*") || array.includes("/")) {
-    
+    // orderOperations(array, division, multiplication, symbol);
     if ((division < multiplication && division >= 0) || multiplication < 0) {
       let formula = array.slice(division - 1, division + 2);
       let answer = formula[0] / formula[2];
@@ -223,8 +229,10 @@ function divideAndMultiply(array) {
 function addAndSubtract(array) {
   let plus = array.indexOf("+");
   let minus = array.indexOf("-");
+  // let symbol = "subtract";
 
   while (array.includes("+") || array.includes("-")) {
+    // orderOperations(array, minus, plus, symbol);
     if ((plus < minus && plus >= 0) || minus < 0) {
       let formula = array.slice(plus - 1, plus + 2);
       let answer = (parseFloat(formula[0]) + parseFloat(formula[2]));
@@ -278,6 +286,36 @@ function conditionBackspace() {
 
   rerender();
 };
+
+// function orderOperations(array, operand1, operand2, symbol) {
+//   let answer;
+//   if ((operand1 < operand2 && operand1 >= 0) || operand2 < 0) {
+//     let formula = array.slice(operand1 - 1, operand1 + 2);
+//       if (symbol == "divide") {
+//     answer = formula[0] / formula[2];
+//     answer = answer.toString();
+//       } else {
+//         answer = formula[0] - formula[2];
+//         answer = answer.toString();
+  //     }
+    
+  //   array.splice(operand1 - 1, 3, answer);
+    
+  // } else {
+  //   let formula = array.slice(operand2 - 1, operand2 + 2);
+  //   if (symbol == "divide") {
+  //   answer = (parseFloat(formula[0])) * (parseFloat(formula[2]));
+  //   answer = answer.toString();
+  //   } else {
+  //     answer = (parseFloat(formula[0])) + (parseFloat(formula[2]))
+  //     answer = answer.toString();
+  //   }
+    
+  //   array.splice(operand2 - 1, 3, answer);
+  // }
+  // operation1 = array.indexOf("/");
+  // operation2 = array.indexOf("*");
+// };
 
 
 function preventSymbols() {
