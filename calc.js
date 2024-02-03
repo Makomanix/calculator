@@ -48,6 +48,9 @@ function handleSymbol(symbol){
   
   switch (symbol) {
     case "Backspace":
+      if (bufferArray[0] == undefined) {
+        return;
+      }
       conditionBackspace();
       break;
 
@@ -148,6 +151,7 @@ function factorials(array) {
     
     for (let i = (number - 1); i > 1; i--) {
       number *= i;
+      number = number.toString();
       
     }
     array.splice(factorial - 1, 2, number);
@@ -163,8 +167,10 @@ function exponents(array) {
   while (array.includes('^')) {
     let base = array[carrot - 1];
     let power = array[carrot + 1];
-    
     let answer = base ** power;
+    
+    answer = answer.toString();
+
     array.splice(carrot - 1, 3, answer)
     carrot = array.indexOf('^');
   }
@@ -177,6 +183,7 @@ function squareRoot(array) {
   while (array.includes('√')) {
     let number = array[radical + 1]
     let answer = Math.sqrt(number);
+    answer = answer.toString();
 
     array.splice(radical, 2, answer);
 
@@ -195,6 +202,7 @@ function divideAndMultiply(array) {
     if ((division < multiplication && division >= 0) || multiplication < 0) {
       let formula = array.slice(division - 1, division + 2);
       let answer = formula[0] / formula[2];
+      answer = answer.toString();
       
       array.splice(division - 1, 3, answer);
       
@@ -226,6 +234,7 @@ function addAndSubtract(array) {
     } else {
       let formula = array.slice(minus - 1, minus + 2);
       let answer = formula[0] - formula[2];
+      answer = answer.toString();
 
       array.splice(minus - 1, 3, answer);
     }
