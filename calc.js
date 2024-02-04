@@ -102,12 +102,18 @@ function handleSymbol(symbol){
       break;
 
     case "√":
+      if (buffer === 'Self Destruct Started') {
+        return;
+      }
       if (buffer == "0" || buffer == "") {
         buffer = symbol;
         bufferArray.push(symbol);
       } else if (buffer.substring(buffer.length - 1) == " ") {
         buffer += symbol;
         bufferArray.push(symbol);
+      } else if (buffer === bufferArray[0]) {
+        buffer = symbol + buffer;
+        bufferArray.unshift(symbol);
       }
       break;
   }
@@ -117,9 +123,10 @@ function handleSymbol(symbol){
 
 
 function handleNumber(number) {
-
-  if (buffer === '0') {
+  if (buffer === bufferArray[0] || buffer === '0' || buffer === 'Self Destruct Started'){
     buffer = number;
+    memory = '';
+    bufferArray = [];
   } else {
     buffer += number
   }
@@ -131,17 +138,17 @@ function handleNumber(number) {
 
 
 function doOperations(array) {
-  // console.log(array);
+  console.log(array);
   factorials(array);
-  // console.log(array);
+  console.log(array);
   exponents(array);
-  // console.log(array);
+  console.log(array);
   squareRoot(array);
-  // console.log(array);
+  console.log(array);
   divideAndMultiply(array);
-  // console.log(array);
+  console.log(array);
   addAndSubtract(array);
-  // console.log(array);
+  console.log(array);
 } 
 
 function factorials(array) {
@@ -214,7 +221,9 @@ function divideAndMultiply(array) {
       
     } else {
       let formula = array.slice(multiplication - 1, multiplication + 2);
-      let answer = formula[0] * formula[2];
+      // let answer = formula[0] * formula[2];
+      let answer = (parseFloat(formula[0]) * parseFloat(formula[2]));
+
       answer = answer.toString();
       
       array.splice(multiplication - 1, 3, answer);
@@ -229,9 +238,12 @@ function divideAndMultiply(array) {
 function addAndSubtract(array) {
   let plus = array.indexOf("+");
   let minus = array.indexOf("-");
-  // let symbol = "subtract";
+  // let symbol = "minus";
+
+  console.log('hi in add');
 
   while (array.includes("+") || array.includes("-")) {
+    console.log('hi in while');
     // orderOperations(array, minus, plus, symbol);
     if ((plus < minus && plus >= 0) || minus < 0) {
       let formula = array.slice(plus - 1, plus + 2);
@@ -255,6 +267,11 @@ function addAndSubtract(array) {
 
 function conditionBackspace() {
   
+  if (buffer === 'Self Destruct Started') {
+    buffer = '0';
+    memory = 'Bomb Deactivated';
+  }
+
   if (preventSymbols()) {
 
     buffer = buffer.substring(0, buffer.length - 3);
@@ -287,35 +304,42 @@ function conditionBackspace() {
   rerender();
 };
 
-// function orderOperations(array, operand1, operand2, symbol) {
-//   let answer;
-//   if ((operand1 < operand2 && operand1 >= 0) || operand2 < 0) {
-//     let formula = array.slice(operand1 - 1, operand1 + 2);
-//       if (symbol == "divide") {
-//     answer = formula[0] / formula[2];
-//     answer = answer.toString();
-//       } else {
-//         answer = formula[0] - formula[2];
-//         answer = answer.toString();
-  //     }
+function orderOperations(array, operand1, operand2, symbol) {
+  let answer;
+  console.log('hi in operations');
+  if ((operand1 < operand2 && operand1 >= 0) || operand2 < 0) {
+    let formula = array.slice(operand1 - 1, operand1 + 2);
+      if (symbol == "divide") {
+        console.log("division");
+    answer = formula[0] / formula[2];
+    answer = answer.toString();
+      } else {
+        console.log("minus");
+        answer = formula[0] - formula[2];
+        answer = answer.toString();
+      }
     
-  //   array.splice(operand1 - 1, 3, answer);
+    array.splice(operand1 - 1, 3, answer);
     
-  // } else {
-  //   let formula = array.slice(operand2 - 1, operand2 + 2);
-  //   if (symbol == "divide") {
-  //   answer = (parseFloat(formula[0])) * (parseFloat(formula[2]));
-  //   answer = answer.toString();
-  //   } else {
-  //     answer = (parseFloat(formula[0])) + (parseFloat(formula[2]))
-  //     answer = answer.toString();
-  //   }
+  } else {
+    console.log('hi before adding');
+    let formula = array.slice(operand2 - 1, operand2 + 2);
+    console.log(formula);
+    if (symbol == "divide") {
+      console.log('multiplication');
+    answer = (parseFloat(formula[0])) * (parseFloat(formula[2]));
+    answer = answer.toString();
+    } else if (symbol == 'minus'){
+      console.log('plus');
+      answer = (parseFloat(formula[0]) + parseFloat(formula[2]))
+      answer = answer.toString();
+    }
     
-  //   array.splice(operand2 - 1, 3, answer);
-  // }
-  // operation1 = array.indexOf("/");
-  // operation2 = array.indexOf("*");
-// };
+    array.splice(operand2 - 1, 3, answer);
+  }
+  operation1 = array.indexOf("/");
+  operation2 = array.indexOf("*");
+};
 
 
 function preventSymbols() {
@@ -324,7 +348,8 @@ function preventSymbols() {
     buffer.substring(buffer.length - 2, buffer.length - 1) == "-" ||
     buffer.substring(buffer.length - 2, buffer.length - 1) == "/" ||
     buffer.substring(buffer.length - 2, buffer.length - 1) == "*" ||
-    buffer.substring(buffer.length - 1, buffer.length) == "√"
+    buffer.substring(buffer.length - 1, buffer.length) == "√" ||
+    buffer === "Self Destruct Started"
   ) {
     return true;
   } else {
@@ -348,11 +373,16 @@ function rerender() {
   if (buffer === '' && onOff == true) {
       buffer = '0';
   } 
+
+  if (buffer === 'Infinity') {
+    buffer = "Self Destruct Started"
+  }
     
     solution.innerText = buffer;
     equation.innerText = memory;
 
-    console.log(buffer)
+    console.log(buffer);
+    console.log(bufferArray);
 };
 
 
