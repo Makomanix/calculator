@@ -123,12 +123,21 @@ function handleSymbol(symbol){
 
 
 function handleNumber(number) {
-  if (buffer === bufferArray[0] || buffer === '0' || buffer === 'Self Destruct Started'){
+
+  if (number === '.' && buffer.includes('.')) {
+    return;
+  }
+
+  if (
+    (buffer === bufferArray[0] && buffer !== "√") ||
+    buffer === "0" ||
+    buffer === "Self Destruct Started"
+  ) {
     buffer = number;
-    memory = '';
+    memory = "";
     bufferArray = [];
   } else {
-    buffer += number
+    buffer += number;
   }
   savedNumber += number;
 
