@@ -41,14 +41,15 @@ function checkSymbol(symbol) {
 console.log(buttonValueArray);
 
 function handleSymbol(symbol){
-  if (savedNumber.length > 0) {
+  
+  if (savedNumber.length > 0 && symbol !== 'Backspace') {
     bufferArray.push(savedNumber);
-    savedNumber = '';
-  };
+    // savedNumber = '';
+  }
   
   switch (symbol) {
     case "Backspace":
-      if (bufferArray[0] == undefined) {
+      if (bufferArray[0] == undefined && savedNumber == '') {
         return;
       }
       conditionBackspace();
@@ -58,6 +59,7 @@ function handleSymbol(symbol){
       buffer = "0";
       memory = "";
       bufferArray = [];
+      savedNumber = ''
       rerender();
       break;
 
@@ -67,8 +69,8 @@ function handleSymbol(symbol){
       } else {
         memory = buffer + " =";
         doOperations(bufferArray);
-        console.log(bufferArray[0]);
         buffer = bufferArray[0];
+        savedNumber = ''
       }
       break;
 
@@ -82,6 +84,7 @@ function handleSymbol(symbol){
 
       bufferArray.push(symbol);
       buffer += " " + symbol + " ";
+      savedNumber = ''
       break;
 
     case "!":
@@ -91,6 +94,7 @@ function handleSymbol(symbol){
 
       bufferArray.push(symbol);
       buffer += symbol + " ";
+      savedNumber = ''
       break;
 
     case "^":
@@ -99,6 +103,7 @@ function handleSymbol(symbol){
       }
       bufferArray.push(symbol);
       buffer += symbol;
+      savedNumber = ''
       break;
 
     case "√":
@@ -115,6 +120,7 @@ function handleSymbol(symbol){
         buffer = symbol + buffer;
         bufferArray.unshift(symbol);
       }
+      savedNumber = ''
       break;
   }
 
@@ -141,23 +147,31 @@ function handleNumber(number) {
   }
   savedNumber += number;
 
+  
+
   rerender();
 };
+
+function handleCommas(number) {
+  let prettyBuffer;
+  let prettyMemory;
+  let wholeNumber = buffer;
+  let decimal;
+  if (buffer.includes(".")) {
+    let parts = buffer.split(".");
+    wholeNumber = parts[0];
+    afterDecimal = parts[1];
+  }
+}
 
 
 
 function doOperations(array) {
-  console.log(array);
   factorials(array);
-  console.log(array);
   exponents(array);
-  console.log(array);
   squareRoot(array);
-  console.log(array);
-  divideAndMultiply(array);
-  console.log(array);
-  addAndSubtract(array);
-  console.log(array);
+  divideAndMultiply(array); 
+  addAndSubtract(array);  
 } 
 
 function factorials(array) {
@@ -174,8 +188,6 @@ function factorials(array) {
     array.splice(factorial - 1, 2, number);
     factorial = array.indexOf('!')
   }
-  
-  return array;
 };
 
 function exponents(array) {
@@ -191,26 +203,20 @@ function exponents(array) {
     array.splice(carrot - 1, 3, answer)
     carrot = array.indexOf('^');
   }
-  return array;
 };
+
 
 function squareRoot(array) {
   let radical = array.indexOf('√');
-  console.log('hello');
-  console.log(array);
   
   while (array.includes('√')) {
     let number = array[radical + 1]
-    console.log('number', number)
     let answer = Math.sqrt(number);
-    console.log('answer', answer)
+    
     answer = answer.toString();
-
     array.splice(radical, 2, answer);
-
     radical = array.indexOf('√');
   }
-  return array;
 };
 
 
@@ -218,59 +224,28 @@ function squareRoot(array) {
 function divideAndMultiply(array) {
   let division = array.indexOf("/");
   let multiplication = array.indexOf("*");
-  // let symbol = "divide";
-  while (array.includes("*") || array.includes("/")) {
-    // orderOperations(array, division, multiplication, symbol);
-    if ((division < multiplication && division >= 0) || multiplication < 0) {
-      let formula = array.slice(division - 1, division + 2);
-      let answer = formula[0] / formula[2];
-      answer = answer.toString();
-      
-      array.splice(division - 1, 3, answer);
-      
-    } else {
-      let formula = array.slice(multiplication - 1, multiplication + 2);
-      // let answer = formula[0] * formula[2];
-      let answer = (parseFloat(formula[0]) * parseFloat(formula[2]));
+  let symbol = "divide";
 
-      answer = answer.toString();
-      
-      array.splice(multiplication - 1, 3, answer);
-    }
+  while (array.includes("*") || array.includes("/")) {
+
+    orderOperations(array, division, multiplication, symbol);
     division = array.indexOf("/");
     multiplication = array.indexOf("*");
   }
-  return array;
 };
 
 
 function addAndSubtract(array) {
   let plus = array.indexOf("+");
   let minus = array.indexOf("-");
-  // let symbol = "minus";
-
-  console.log('hi in add');
+  let symbol = "minus";
 
   while (array.includes("+") || array.includes("-")) {
-    console.log('hi in while');
-    // orderOperations(array, minus, plus, symbol);
-    if ((plus < minus && plus >= 0) || minus < 0) {
-      let formula = array.slice(plus - 1, plus + 2);
-      let answer = (parseFloat(formula[0]) + parseFloat(formula[2]));
-      answer = answer.toString();
 
-      array.splice(plus - 1, 3, answer);
-    } else {
-      let formula = array.slice(minus - 1, minus + 2);
-      let answer = formula[0] - formula[2];
-      answer = answer.toString();
-
-      array.splice(minus - 1, 3, answer);
-    }
+    orderOperations(array, minus, plus, symbol);
     plus = array.indexOf("+");
     minus = array.indexOf("-");
   }
-  return array;
 };
 
 
@@ -295,19 +270,23 @@ function conditionBackspace() {
 
     let currentNumber;
 
-    if (bufferArray.length >= 1) {
+    if (bufferArray[0] == undefined) {
+      
+      buffer = savedNumber.substring(0, savedNumber.length - 1);
+      savedNumber = savedNumber.substring(0, savedNumber.length - 1);
+    } else if (bufferArray.length >= 1) {
       currentNumber = bufferArray.pop();
+      if (currentNumber.length >= 1 ) {
+  
+        currentNumber = currentNumber.substring(0, currentNumber.length - 1);
+        bufferArray.push(currentNumber);
+        buffer = buffer.substring(0, buffer.length - 1);
+  
+      } else {
+        buffer = buffer.substring(0, buffer.length - 1);
+      }
     }
 
-    if (currentNumber.length > 1 ) {
-
-      currentNumber = currentNumber.substring(0, currentNumber.length - 1);
-      bufferArray.push(currentNumber);
-      buffer = buffer.substring(0, buffer.length - 1);
-
-    } else {
-      buffer = buffer.substring(0, buffer.length - 1);
-    }
   }
 
   rerender();
@@ -315,15 +294,15 @@ function conditionBackspace() {
 
 function orderOperations(array, operand1, operand2, symbol) {
   let answer;
-  console.log('hi in operations');
+
   if ((operand1 < operand2 && operand1 >= 0) || operand2 < 0) {
     let formula = array.slice(operand1 - 1, operand1 + 2);
       if (symbol == "divide") {
-        console.log("division");
+
     answer = formula[0] / formula[2];
     answer = answer.toString();
       } else {
-        console.log("minus");
+
         answer = formula[0] - formula[2];
         answer = answer.toString();
       }
@@ -331,23 +310,20 @@ function orderOperations(array, operand1, operand2, symbol) {
     array.splice(operand1 - 1, 3, answer);
     
   } else {
-    console.log('hi before adding');
+
     let formula = array.slice(operand2 - 1, operand2 + 2);
-    console.log(formula);
+
     if (symbol == "divide") {
-      console.log('multiplication');
     answer = (parseFloat(formula[0])) * (parseFloat(formula[2]));
     answer = answer.toString();
+
     } else if (symbol == 'minus'){
-      console.log('plus');
       answer = (parseFloat(formula[0]) + parseFloat(formula[2]))
       answer = answer.toString();
     }
     
     array.splice(operand2 - 1, 3, answer);
   }
-  operation1 = array.indexOf("/");
-  operation2 = array.indexOf("*");
 };
 
 
@@ -386,6 +362,10 @@ function rerender() {
   if (buffer === 'Infinity') {
     buffer = "Self Destruct Started"
   }
+
+  // if (buffer.length >)
+  // handleCommas();
+
     
     solution.innerText = buffer;
     equation.innerText = memory;
