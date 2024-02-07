@@ -42,9 +42,9 @@ console.log(buttonValueArray);
 
 function handleSymbol(symbol){
   
-  if (savedNumber.length > 0 && symbol !== 'Backspace') {
+  if (savedNumber.length > 0 && savedNumber != '') {
     bufferArray.push(savedNumber);
-    // savedNumber = '';
+    console.log('top of handleSymbol', bufferArray);
   }
   
   switch (symbol) {
@@ -52,7 +52,9 @@ function handleSymbol(symbol){
       if (bufferArray[0] == undefined && savedNumber == '') {
         return;
       }
+      console.log('in Backspace');
       conditionBackspace();
+      savedNumber = '';
       break;
 
     case "Delete":
@@ -250,51 +252,89 @@ function addAndSubtract(array) {
 
 
 function conditionBackspace() {
+
+  console.log("");
   
   if (buffer === 'Self Destruct Started') {
     buffer = '0';
     memory = 'Bomb Deactivated';
   }
 
+  let currentNumber;
+  
   if (preventSymbols()) {
+    console.log("am i in preventSymbols");
 
-    buffer = buffer.substring(0, buffer.length - 3);
-    bufferArray.pop();
+    if (buffer.substring(buffer.length - 2, buffer.length - 1) == "!") {
 
-  } else if (buffer.substring(buffer.length - 2, buffer.length - 1) == "!") {
+        buffer = buffer.substring(0, buffer.length - 2);
+        bufferArray.pop();
 
-    buffer = buffer.substring(0, buffer.length - 2);
-    bufferArray.pop();
-    
-  } else {
+    } else {
 
-    let currentNumber;
+      buffer = buffer.substring(0, buffer.length - 3);
+      bufferArray.pop();
 
-    if (bufferArray[0] == undefined) {
-      
-      buffer = savedNumber.substring(0, savedNumber.length - 1);
-      savedNumber = savedNumber.substring(0, savedNumber.length - 1);
-    } else if (bufferArray.length >= 1) {
-      currentNumber = bufferArray.pop();
-      if (currentNumber.length >= 1 ) {
-  
-        currentNumber = currentNumber.substring(0, currentNumber.length - 1);
-        bufferArray.push(currentNumber);
-        buffer = buffer.substring(0, buffer.length - 1);
-  
-      } else {
-        buffer = buffer.substring(0, buffer.length - 1);
-      }
     }
 
-  }
+    console.log('buffer', buffer);
+    console.log('bufferArray', bufferArray);
 
-  rerender();
+    return;
+
+  } 
+
+    console.log('buffer before mod', buffer);
+    console.log('bufferArray before mod', bufferArray);
+    console.log("bufferArray length", bufferArray.length);
+    console.log('currentNumber before mod', currentNumber);
+    
+    if (bufferArray.length == 1) {
+      currentNumber = bufferArray[0];
+      console.log('what!',)
+    } else {
+      currentNumber = bufferArray.pop();
+      console.log("bufferArray in else", bufferArray);
+      // console.log("");
+    }
+
+    currentNumber = currentNumber.substring(0, currentNumber.length - 1);
+    buffer = buffer.substring(0, buffer.length - 1);
+
+    if (currentNumber == '') {
+      console.log(currentNumber);
+      return;
+    } else {
+    bufferArray.push(currentNumber);
+    }
+
+        console.log("buffer after mod", buffer);
+        console.log("bufferArray after mod", bufferArray);
+
+    // if (bufferArray[0] == undefined) {
+      
+    //   buffer = savedNumber.substring(0, savedNumber.length - 1);
+    //   savedNumber = savedNumber.substring(0, savedNumber.length - 1);
+    // } else if (bufferArray.length >= 1) {
+    //   currentNumber = bufferArray.pop();
+    //   if (currentNumber.length >= 1 ) {
+  
+    //     currentNumber = currentNumber.substring(0, currentNumber.length - 1);
+    //     bufferArray.push(currentNumber);
+    //     buffer = buffer.substring(0, buffer.length - 1);
+  
+    //   } else {
+    //     buffer = buffer.substring(0, buffer.length - 1);
+    //   }
+    // }
+
+  // }
+
 };
 
 function orderOperations(array, operand1, operand2, symbol) {
   let answer;
-
+  console.log('hi in operations');
   if ((operand1 < operand2 && operand1 >= 0) || operand2 < 0) {
     let formula = array.slice(operand1 - 1, operand1 + 2);
       if (symbol == "divide") {
@@ -370,8 +410,8 @@ function rerender() {
     solution.innerText = buffer;
     equation.innerText = memory;
 
-    console.log(buffer);
-    console.log(bufferArray);
+    // console.log("buffer", buffer);
+    // console.log('bufferArray', bufferArray);
 };
 
 
@@ -415,3 +455,75 @@ function init() {
 };
 
 init();
+
+
+
+
+// function conditionBackspace() {
+//   // if (bufferArray.length = 1) {
+//   //   bufferArray = [];
+//   //   console.log('empty');
+//   // }
+
+//   console.log("");
+  
+//   if (buffer === 'Self Destruct Started') {
+//     buffer = '0';
+//     memory = 'Bomb Deactivated';
+//   }
+
+//   let currentNumber;
+  
+//   if (preventSymbols()) {
+//     console.log("am i in preventSymbols");
+
+//     buffer = buffer.substring(0, buffer.length - 3);
+
+//     currentNumber = bufferArray.pop();
+
+//   } else if (buffer.substring(buffer.length - 2, buffer.length - 1) == "!") {
+
+//     buffer = buffer.substring(0, buffer.length - 2);
+
+//     currentNumber = bufferArray.pop();
+    
+//   } else {
+
+
+
+//     console.log('buffer before mod', buffer);
+//     console.log('bufferArray before mod', bufferArray);
+//     console.log("bufferArray length", bufferArray.length);
+//     console.log('currentNumber before mod', currentNumber);
+    
+//     if (bufferArray.length == 1) {
+//       currentNumber = bufferArray[0];
+//       console.log('what!',)
+//     } else {
+//       currentNumber = bufferArray.pop();
+//       console.log("bufferArray in else", bufferArray);
+//       // console.log("");
+//     }
+
+//     currentNumber = currentNumber.substring(0, currentNumber.length - 1);
+//     buffer = buffer.substring(0, buffer.length - 1);
+
+//     if (currentNumber == '') {
+//       console.log(currentNumber);
+//       return;
+//     } else {
+//     bufferArray.push(currentNumber);
+//     }
+
+//         console.log("buffer after mod", buffer);
+//         console.log("bufferArray after mod", bufferArray);
+
+//   }
+
+// };
+
+function replaceInPlace(string) {
+  if (string.length > 1) {
+
+  }
+}
