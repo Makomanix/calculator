@@ -54,12 +54,16 @@ function handleSymbol(symbol){
       }
       console.log('in Backspace');
       conditionBackspace();
-      savedNumber = '';
       break;
 
     case "Delete":
+      if (buffer == "Self Destruct Initiated") {
+        buffer = "0";
+        memory = "Bomb Deactivated";
+      } else {
       buffer = "0";
       memory = "";
+      }
       bufferArray = [];
       savedNumber = ''
       rerender();
@@ -109,7 +113,7 @@ function handleSymbol(symbol){
       break;
 
     case "√":
-      if (buffer === 'Self Destruct Started') {
+      if (buffer === 'Self Destruct Initiated') {
         return;
       }
       if (buffer == "0" || buffer == "") {
@@ -139,7 +143,7 @@ function handleNumber(number) {
   if (
     (buffer === bufferArray[0] && buffer !== "√") ||
     buffer === "0" ||
-    buffer === "Self Destruct Started"
+    buffer === "Self Destruct Initiated"
   ) {
     buffer = number;
     memory = "";
@@ -148,7 +152,7 @@ function handleNumber(number) {
     buffer += number;
   }
   savedNumber += number;
-
+  console.log('savedNumber in handleNumber',savedNumber);
   
 
   rerender();
@@ -253,11 +257,12 @@ function addAndSubtract(array) {
 
 function conditionBackspace() {
 
-  console.log("");
+  console.log("bufferArray", bufferArray);
   
-  if (buffer === 'Self Destruct Started') {
-    buffer = '0';
-    memory = 'Bomb Deactivated';
+  if (buffer === 'Self Destruct Initiated') {
+    return;
+    // buffer = '0';
+    // memory = 'Bomb Deactivated';
   }
 
   let currentNumber;
@@ -304,9 +309,12 @@ function conditionBackspace() {
     if (currentNumber == '') {
       console.log(currentNumber);
       return;
-    } else {
+    } else if (bufferArray.length > 1){
     bufferArray.push(currentNumber);
-    }
+    } else {
+      savedNumber = currentNumber;
+      bufferArray = [];
+    };
 
         console.log("buffer after mod", buffer);
         console.log("bufferArray after mod", bufferArray);
@@ -374,7 +382,7 @@ function preventSymbols() {
     buffer.substring(buffer.length - 2, buffer.length - 1) == "/" ||
     buffer.substring(buffer.length - 2, buffer.length - 1) == "*" ||
     buffer.substring(buffer.length - 1, buffer.length) == "√" ||
-    buffer === "Self Destruct Started"
+    buffer === "Self Destruct Initiated"
   ) {
     return true;
   } else {
@@ -400,7 +408,7 @@ function rerender() {
   } 
 
   if (buffer === 'Infinity') {
-    buffer = "Self Destruct Started"
+    buffer = "Self Destruct Initiated"
   }
 
   // if (buffer.length >)
@@ -410,8 +418,8 @@ function rerender() {
     solution.innerText = buffer;
     equation.innerText = memory;
 
-    // console.log("buffer", buffer);
-    // console.log('bufferArray', bufferArray);
+    console.log("buffer", buffer);
+    console.log('bufferArray', bufferArray);
 };
 
 
@@ -467,7 +475,7 @@ init();
 
 //   console.log("");
   
-//   if (buffer === 'Self Destruct Started') {
+//   if (buffer === 'Self Destruct Initiated') {
 //     buffer = '0';
 //     memory = 'Bomb Deactivated';
 //   }
