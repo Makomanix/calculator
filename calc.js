@@ -38,21 +38,16 @@ function checkSymbol(symbol) {
   return (!(buttonValueArray.includes(symbol))) ? false : true
 };
 
-console.log(buttonValueArray);
 
 function handleSymbol(symbol){
   
-  if (savedNumber.length > 0 && savedNumber != '') {
-    bufferArray.push(savedNumber);
-    console.log('top of handleSymbol', bufferArray);
-  }
-  
   switch (symbol) {
+
     case "Backspace":
-      if (bufferArray[0] == undefined && savedNumber == '') {
+      if (buffer === "Self Destruct Initiated") {
         return;
-      }
-      console.log('in Backspace');
+      };
+
       conditionBackspace();
       break;
 
@@ -61,22 +56,29 @@ function handleSymbol(symbol){
         buffer = "0";
         memory = "Bomb Deactivated";
       } else {
+
       buffer = "0";
       memory = "";
-      }
       bufferArray = [];
-      savedNumber = ''
-      rerender();
+      savedNumber = '';
+      };
       break;
 
     case "Enter":
-      if (buffer == "0" || buffer == "") {
+      if (
+        buffer == "0" ||
+        buffer == "" ||
+        buffer === "Self Destruct Initiated"
+      ) {
         return;
+
       } else {
+
+        pushSavedNumber();
         memory = buffer + " =";
         doOperations(bufferArray);
         buffer = bufferArray[0];
-        savedNumber = ''
+        savedNumber = "";
       }
       break;
 
@@ -84,29 +86,48 @@ function handleSymbol(symbol){
     case "-":
     case "/":
     case "*":
-      if (buffer == "0" || buffer == "" || preventSymbols()) {
+      if (
+        buffer == "0" ||
+        buffer == "" ||
+        preventSymbols() ||
+        buffer === "Self Destruct Initiated"
+      ) {
         return;
       }
 
+      pushSavedNumber();
       bufferArray.push(symbol);
       buffer += " " + symbol + " ";
       savedNumber = ''
       break;
 
     case "!":
-      if (buffer == "0" || buffer == "" || preventSymbols()) {
+      if (
+        buffer == "0" ||
+        buffer == "" ||
+        preventSymbols() ||
+        buffer === "Self Destruct Initiated"
+      ) {
         return;
       }
 
+      pushSavedNumber();
       bufferArray.push(symbol);
       buffer += symbol + " ";
       savedNumber = ''
       break;
 
     case "^":
-      if (buffer == "0" || buffer == "" || preventSymbols()) {
+      if (
+        buffer == "0" ||
+        buffer == "" ||
+        preventSymbols() ||
+        buffer === "Self Destruct Initiated"
+      ) {
         return;
-      }
+      };
+
+      pushSavedNumber();
       bufferArray.push(symbol);
       buffer += symbol;
       savedNumber = ''
@@ -116,6 +137,9 @@ function handleSymbol(symbol){
       if (buffer === 'Self Destruct Initiated') {
         return;
       }
+
+      pushSavedNumber();
+
       if (buffer == "0" || buffer == "") {
         buffer = symbol;
         bufferArray.push(symbol);
@@ -255,91 +279,6 @@ function addAndSubtract(array) {
 };
 
 
-function conditionBackspace() {
-
-  console.log("bufferArray", bufferArray);
-  
-  if (buffer === 'Self Destruct Initiated') {
-    return;
-    // buffer = '0';
-    // memory = 'Bomb Deactivated';
-  }
-
-  let currentNumber;
-  
-  if (preventSymbols()) {
-    console.log("am i in preventSymbols");
-
-    if (buffer.substring(buffer.length - 2, buffer.length - 1) == "!") {
-
-        buffer = buffer.substring(0, buffer.length - 2);
-        bufferArray.pop();
-
-    } else {
-
-      buffer = buffer.substring(0, buffer.length - 3);
-      bufferArray.pop();
-
-    }
-
-    console.log('buffer', buffer);
-    console.log('bufferArray', bufferArray);
-
-    return;
-
-  } 
-
-    console.log('buffer before mod', buffer);
-    console.log('bufferArray before mod', bufferArray);
-    console.log("bufferArray length", bufferArray.length);
-    console.log('currentNumber before mod', currentNumber);
-    
-    if (bufferArray.length == 1) {
-      currentNumber = bufferArray[0];
-      console.log('what!',)
-    } else {
-      currentNumber = bufferArray.pop();
-      console.log("bufferArray in else", bufferArray);
-      // console.log("");
-    }
-
-    currentNumber = currentNumber.substring(0, currentNumber.length - 1);
-    buffer = buffer.substring(0, buffer.length - 1);
-
-    if (currentNumber == '') {
-      console.log(currentNumber);
-      return;
-    } else if (bufferArray.length > 1){
-    bufferArray.push(currentNumber);
-    } else {
-      savedNumber = currentNumber;
-      bufferArray = [];
-    };
-
-        console.log("buffer after mod", buffer);
-        console.log("bufferArray after mod", bufferArray);
-
-    // if (bufferArray[0] == undefined) {
-      
-    //   buffer = savedNumber.substring(0, savedNumber.length - 1);
-    //   savedNumber = savedNumber.substring(0, savedNumber.length - 1);
-    // } else if (bufferArray.length >= 1) {
-    //   currentNumber = bufferArray.pop();
-    //   if (currentNumber.length >= 1 ) {
-  
-    //     currentNumber = currentNumber.substring(0, currentNumber.length - 1);
-    //     bufferArray.push(currentNumber);
-    //     buffer = buffer.substring(0, buffer.length - 1);
-  
-    //   } else {
-    //     buffer = buffer.substring(0, buffer.length - 1);
-    //   }
-    // }
-
-  // }
-
-};
-
 function orderOperations(array, operand1, operand2, symbol) {
   let answer;
   console.log('hi in operations');
@@ -464,74 +403,69 @@ function init() {
 
 init();
 
+function conditionBackspace() {
+  backspaceBuffer();
+  backspaceArray();
+  backspaceSavedNumber();
+};
 
+function backspaceBuffer() {
+  if (buffer.length == 1) {
+    buffer = '0';
+    return;
+  };
 
+  if (preventSymbols()) {
+    if (buffer.substring(buffer.length - 2, buffer.length - 1) == "!") {
+      buffer = buffer.substring(0, buffer.length - 2);
+      
+    } else {
 
-// function conditionBackspace() {
-//   // if (bufferArray.length = 1) {
-//   //   bufferArray = [];
-//   //   console.log('empty');
-//   // }
+      buffer = buffer.substring(0, buffer.length - 3);
+    }
 
-//   console.log("");
-  
-//   if (buffer === 'Self Destruct Initiated') {
-//     buffer = '0';
-//     memory = 'Bomb Deactivated';
-//   }
+    console.log("buffer in preventSymbols", buffer);
+    return;
+  } else {
 
-//   let currentNumber;
-  
-//   if (preventSymbols()) {
-//     console.log("am i in preventSymbols");
-
-//     buffer = buffer.substring(0, buffer.length - 3);
-
-//     currentNumber = bufferArray.pop();
-
-//   } else if (buffer.substring(buffer.length - 2, buffer.length - 1) == "!") {
-
-//     buffer = buffer.substring(0, buffer.length - 2);
-
-//     currentNumber = bufferArray.pop();
-    
-//   } else {
-
-
-
-//     console.log('buffer before mod', buffer);
-//     console.log('bufferArray before mod', bufferArray);
-//     console.log("bufferArray length", bufferArray.length);
-//     console.log('currentNumber before mod', currentNumber);
-    
-//     if (bufferArray.length == 1) {
-//       currentNumber = bufferArray[0];
-//       console.log('what!',)
-//     } else {
-//       currentNumber = bufferArray.pop();
-//       console.log("bufferArray in else", bufferArray);
-//       // console.log("");
-//     }
-
-//     currentNumber = currentNumber.substring(0, currentNumber.length - 1);
-//     buffer = buffer.substring(0, buffer.length - 1);
-
-//     if (currentNumber == '') {
-//       console.log(currentNumber);
-//       return;
-//     } else {
-//     bufferArray.push(currentNumber);
-//     }
-
-//         console.log("buffer after mod", buffer);
-//         console.log("bufferArray after mod", bufferArray);
-
-//   }
-
-// };
-
-function replaceInPlace(string) {
-  if (string.length > 1) {
-
+    buffer = buffer.substring(0, buffer.length - 1);
+    return;
   }
-}
+};
+
+function backspaceArray() {
+
+  if (bufferArray[0] == undefined  || savedNumber != '') {
+    console.log('savedNumber in backspaceArray', savedNumber)
+    return;
+  }
+
+  console.log('In backspaceArray');
+
+  if (parseInt((bufferArray[bufferArray.length - 1])) == NaN) {
+
+    let poo = bufferArray.pop();
+    console.log(poo);
+  } else {
+
+    savedNumber = bufferArray.pop();
+  }
+  
+};
+
+
+function backspaceSavedNumber() {
+  if (savedNumber == '') {
+    return
+  } else {
+    savedNumber = savedNumber.substring(0, savedNumber.length - 1)
+  }
+  return;
+};
+
+
+function pushSavedNumber() {
+  if (savedNumber.length > 0 && savedNumber != '') {
+    bufferArray.push(savedNumber);
+  }
+};
