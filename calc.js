@@ -160,7 +160,7 @@ function handleSymbol(symbol){
 
 function handleNumber(number) {
 
-  if (number === '.' && buffer.includes('.')) {
+  if (number === '.' && savedNumber.includes('.')) {
     return;
   }
 
@@ -193,7 +193,6 @@ function handleCommas(number) {
     afterDecimal = parts[1];
   }
 }
-
 
 
 function doOperations(array) {
@@ -415,23 +414,23 @@ function backspaceBuffer() {
     return;
   };
 
-  if (preventSymbols()) {
-    if (buffer.substring(buffer.length - 2, buffer.length - 1) == "!") {
-      buffer = buffer.substring(0, buffer.length - 2);
+  if (preventSymbols() && 
+    buffer.substring(buffer.length - 1, buffer.length) != '√') {
+
+    buffer = buffer.substring(0, buffer.length - 3);
+    return;  
+  };
+
+  if (buffer.substring(buffer.length - 2, buffer.length - 1) == "!") {
+
+    buffer = buffer.substring(0, buffer.length - 2);
+    return;
+  }; 
       
-    } else {
-
-      buffer = buffer.substring(0, buffer.length - 3);
-    }
-
     console.log("buffer in preventSymbols", buffer);
-    return;
-  } else {
-
     buffer = buffer.substring(0, buffer.length - 1);
-    return;
-  }
 };
+
 
 function backspaceArray() {
 
@@ -441,16 +440,15 @@ function backspaceArray() {
   }
 
   console.log('In backspaceArray');
+  console.log(parseInt((bufferArray[bufferArray.length - 1])));
 
   if (parseInt((bufferArray[bufferArray.length - 1])) == NaN) {
 
-    let poo = bufferArray.pop();
-    console.log(poo);
+    console.log(bufferArray.pop());
   } else {
 
     savedNumber = bufferArray.pop();
-  }
-  
+  } 
 };
 
 
@@ -460,7 +458,6 @@ function backspaceSavedNumber() {
   } else {
     savedNumber = savedNumber.substring(0, savedNumber.length - 1)
   }
-  return;
 };
 
 
