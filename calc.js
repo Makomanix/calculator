@@ -3,6 +3,7 @@ let memory = '';
 let bufferArray = [];
 let savedNumber = ''
 let onOff = false;
+// let carrot = false;
 
 
 const buttonValues = document.querySelectorAll("button");
@@ -102,11 +103,15 @@ function handleSymbol(symbol){
       break;
 
     case "!":
+      console.log(symbol);
+      console.log(bufferArray);
+      console.log("buffer",buffer);
       if (
         buffer == "0" ||
         buffer == "" ||
         preventSymbols() ||
-        buffer === "Self Destruct Initiated"
+        buffer === "Self Destruct Initiated" ||
+        bufferArray[bufferArray.length - 1] == "!"
       ) {
         return;
       }
@@ -131,6 +136,7 @@ function handleSymbol(symbol){
       bufferArray.push(symbol);
       buffer += symbol;
       savedNumber = ''
+      // carrot = true;
       break;
 
     case "√":
@@ -160,7 +166,10 @@ function handleSymbol(symbol){
 
 function handleNumber(number) {
 
-  if (number === '.' && savedNumber.includes('.')) {
+  console.log("savedNumber before handle#", savedNumber);
+  console.log('bufferArray in saved#', bufferArray);
+
+  if (number === '.' && savedNumber.includes('.') || number === '.' && bufferArray[bufferArray.length - 1] == "^") {
     return;
   }
 
@@ -176,21 +185,44 @@ function handleNumber(number) {
     buffer += number;
   }
   savedNumber += number;
-  console.log('savedNumber in handleNumber',savedNumber);
+  console.log('savedNumber after handleNumber',savedNumber);
   
 
   rerender();
 };
 
-function handleCommas(number) {
+function handleCommas() {
   let prettyBuffer;
   let prettyMemory;
   let wholeNumber = buffer;
   let decimal;
-  if (buffer.includes(".")) {
-    let parts = buffer.split(".");
-    wholeNumber = parts[0];
-    afterDecimal = parts[1];
+  let count = 0;
+  let commalessArray = wholeNumber.split(' ');
+
+  // console.log('commalessArray', commalessArray);
+  for (let i = 0; i < commalessArray.length; i++) {
+    let item = commalessArray[i];
+
+    if ( item.includes('.') ) {
+      item = item.split('.')[0];
+    }
+
+    // console.log("item", item);
+
+    if ( item.length > 3) {
+      let count = 0
+      let commaArray = item.split('')
+      for ( let j = commaArray.length - 1 ; j > 0 ; j-- ){
+        count ++;
+        if ( count % 3 === 0 ) {
+          // console.log("HELP");
+          commaArray.splice(j, 0, ',');
+        }
+        // console.log('Comma', commaArray);
+      }
+      
+    }
+    commalessArray.join()
   }
 }
 
@@ -220,17 +252,17 @@ function factorials(array) {
 };
 
 function exponents(array) {
-  let carrot = array.indexOf('^');
+  let exponent = array.indexOf('^');
 
   while (array.includes('^')) {
-    let base = array[carrot - 1];
-    let power = array[carrot + 1];
+    let base = array[exponent - 1];
+    let power = array[exponent + 1];
     let answer = base ** power;
     
     answer = answer.toString();
 
-    array.splice(carrot - 1, 3, answer)
-    carrot = array.indexOf('^');
+    array.splice(exponent - 1, 3, answer)
+    exponent = array.indexOf('^');
   }
 };
 
@@ -349,15 +381,13 @@ function rerender() {
     buffer = "Self Destruct Initiated"
   }
 
-  // if (buffer.length >)
-  // handleCommas();
-
+  handleCommas();
     
-    solution.innerText = buffer;
-    equation.innerText = memory;
+  solution.innerText = buffer;
+  equation.innerText = memory;
 
-    console.log("buffer", buffer);
-    console.log('bufferArray', bufferArray);
+  // console.log("buffer", buffer);
+  // console.log('bufferArray', bufferArray);
 };
 
 
@@ -427,7 +457,7 @@ function backspaceBuffer() {
     return;
   }; 
       
-    console.log("buffer in preventSymbols", buffer);
+    // console.log("buffer in preventSymbols", buffer);
     buffer = buffer.substring(0, buffer.length - 1);
 };
 
@@ -435,16 +465,16 @@ function backspaceBuffer() {
 function backspaceArray() {
 
   if (bufferArray[0] == undefined  || savedNumber != '') {
-    console.log('savedNumber in backspaceArray', savedNumber)
+    // console.log('savedNumber in backspaceArray', savedNumber)
     return;
   }
 
-  console.log('In backspaceArray');
-  console.log(parseInt((bufferArray[bufferArray.length - 1])));
+  // console.log('In backspaceArray');
+  // console.log(parseInt((bufferArray[bufferArray.length - 1])));
 
   if (parseInt((bufferArray[bufferArray.length - 1])) == NaN) {
 
-    console.log(bufferArray.pop());
+    // console.log(bufferArray.pop());
   } else {
 
     savedNumber = bufferArray.pop();
@@ -457,6 +487,11 @@ function backspaceSavedNumber() {
     return
   } else {
     savedNumber = savedNumber.substring(0, savedNumber.length - 1)
+    // if ( savedNumber.includes('^') ) {
+    //   carrot = true;
+    // } else {
+    //   carrot = false;
+    // }
   }
 };
 
@@ -464,5 +499,6 @@ function backspaceSavedNumber() {
 function pushSavedNumber() {
   if (savedNumber.length > 0 && savedNumber != '') {
     bufferArray.push(savedNumber);
+    // carrot = false;
   }
 };
