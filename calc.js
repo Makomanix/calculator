@@ -136,7 +136,7 @@ function handleSymbol(symbol){
       if (preventSymbols(symbol)) {
         return;
       }
-
+      
       pushSavedNumber();
 
       if (buffer == "0" || buffer == "") {
@@ -149,6 +149,7 @@ function handleSymbol(symbol){
         buffer = symbol + buffer;
         bufferArray.unshift(symbol);
       }
+
       savedNumber = ''
       console.log("buffer at end", buffer);
       console.log('bufferArray at end', bufferArray);
@@ -368,7 +369,6 @@ function preventSymbols(symbol) {
       bufferArray[bufferArray.length - 1] == "-" ||
       bufferArray[bufferArray.length - 1] == "/" ||
       bufferArray[bufferArray.length - 1] == "*" ||
-      bufferArray[bufferArray.length - 1] == "√" ||
       bufferArray[bufferArray.length - 1] == "^" ||
       bufferArray[bufferArray.length - 1] == "!" 
     ) {
