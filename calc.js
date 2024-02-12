@@ -116,9 +116,17 @@ function handleSymbol(symbol){
         return;
       };
 
+      
+      if (bufferArray[bufferArray.length - 1] == "!") {
+        console.log('remove a space');
+        buffer = buffer.substring(0, buffer.length -1);
+        buffer += symbol;
+      } else {
+        buffer += symbol;
+      }
+      
       pushSavedNumber();
       bufferArray.push(symbol);
-      buffer += symbol;
       savedNumber = ''
       // carrot = true;
       break;
@@ -356,11 +364,11 @@ function preventSymbols(symbol) {
     if (
       buffer == "0" ||
       buffer == "" ||
-      buffer.substring(buffer.length - 2, buffer.length - 1) == "+" ||
-      buffer.substring(buffer.length - 2, buffer.length - 1) == "-" ||
-      buffer.substring(buffer.length - 2, buffer.length - 1) == "/" ||
-      buffer.substring(buffer.length - 2, buffer.length - 1) == "*" ||
-      buffer.substring(buffer.length - 1, buffer.length) == "√" ||
+      bufferArray[bufferArray.length - 1] == "+" ||
+      bufferArray[bufferArray.length - 1] == "-" ||
+      bufferArray[bufferArray.length - 1] == "/" ||
+      bufferArray[bufferArray.length - 1] == "*" ||
+      bufferArray[bufferArray.length - 1] == "√" ||
       bufferArray[bufferArray.length - 1] == "^" ||
       bufferArray[bufferArray.length - 1] == "!" 
     ) {
@@ -379,7 +387,6 @@ function preventSymbols(symbol) {
       bufferArray[bufferArray.length - 1] == "/" ||
       bufferArray[bufferArray.length - 1] == "*" ||
       bufferArray[bufferArray.length - 1] == "^" ||
-      // bufferArray[bufferArray.length - 1] == "!" ||
       bufferArray[bufferArray.length - 1] == "√"
       ) {
         return true;
@@ -441,8 +448,6 @@ function rerender() {
   solution.innerText = buffer;
   equation.innerText = memory;
 
-  // console.log("buffer", buffer);
-  // console.log('bufferArray', bufferArray);
 };
 
 
@@ -499,23 +504,23 @@ function backspaceBuffer(symbol) {
     return;
   };
 
-  if (preventSymbols(symbol) && 
-    buffer.substring(buffer.length - 1, buffer.length) != '√' &&
-    buffer.substring(buffer.length - 2, buffer.length - 1) != '!' &&
-    buffer.substring(buffer.length - 1, buffer.length) != '^'
+  if (preventSymbols(symbol) &&
+      bufferArray[bufferArray.length - 1] != "√" &&
+      bufferArray[bufferArray.length - 1] != "!" &&
+      bufferArray[bufferArray.length - 1] != "^" 
     ) {
       console.log('hi in backspaceBuffer')
     buffer = buffer.substring(0, buffer.length - 3);
     return;  
   };
 
-  if (buffer.substring(buffer.length - 2, buffer.length - 1) == "!") {
+  if (buffer.substring(buffer.length - 2, buffer.length - 1) == "!" &&
+      buffer.substring(buffer.length - 1, buffer.length) != '^') {
 
     buffer = buffer.substring(0, buffer.length - 2);
     return;
   }; 
       
-    // console.log("buffer in preventSymbols", buffer);
     buffer = buffer.substring(0, buffer.length - 1);
 };
 
