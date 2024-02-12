@@ -335,6 +335,7 @@ function orderOperations(array, operand1, operand2, symbol) {
 function preventSymbols(symbol) {
 
   console.log('top prevent', symbol);
+  console.log('saved Number', savedNumber);
   if ( buffer === "Self Destruct Initiated" ) {
     return true;
   }
@@ -388,13 +389,22 @@ function preventSymbols(symbol) {
     }
     
     if (symbol == "!") {
+      console.log('hi');
       if (
         buffer == "0" ||
         buffer == "" ||
         bufferArray[bufferArray.length - 1] == "!" ||
         bufferArray[bufferArray.length - 1] == "√" ||
+        savedNumber == '' &&
         bufferArray[bufferArray.length - 1] == "^" ||
-        bufferArray[bufferArray.length - 1] == "+" 
+        savedNumber == '' &&
+        bufferArray[bufferArray.length - 1] == "+" ||
+        savedNumber == '' &&
+        bufferArray[bufferArray.length - 1] == "/" ||
+        savedNumber == '' &&
+        bufferArray[bufferArray.length - 1] == "*" ||
+        savedNumber == '' &&
+        bufferArray[bufferArray.length - 1] == "-"
         ) {
           return true;
         } else {
