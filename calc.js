@@ -299,7 +299,7 @@ function addAndSubtract(array) {
 
 function orderOperations(array, operand1, operand2, symbol) {
   let answer;
-  console.log('hi in operations');
+  
   if ((operand1 < operand2 && operand1 >= 0) || operand2 < 0) {
     let formula = array.slice(operand1 - 1, operand1 + 2);
       if (symbol == "divide") {
@@ -389,7 +389,7 @@ function preventSymbols(symbol) {
     }
     
     if (symbol == "!") {
-      console.log('hi');
+      
       if (
         buffer == "0" ||
         buffer == "" ||
@@ -500,8 +500,11 @@ function backspaceBuffer(symbol) {
   };
 
   if (preventSymbols(symbol) && 
-    buffer.substring(buffer.length - 1, buffer.length) != '√') {
-
+    buffer.substring(buffer.length - 1, buffer.length) != '√' &&
+    buffer.substring(buffer.length - 2, buffer.length - 1) != '!' &&
+    buffer.substring(buffer.length - 1, buffer.length) != '^'
+    ) {
+      console.log('hi in backspaceBuffer')
     buffer = buffer.substring(0, buffer.length - 3);
     return;  
   };
