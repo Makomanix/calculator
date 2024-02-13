@@ -145,10 +145,7 @@ function handleSymbol(symbol){
       } else if (buffer.substring(buffer.length - 1) == " " || buffer.substring(buffer.length - 1) == "^") {
         buffer += symbol;
         bufferArray.push(symbol);
-      } else if (buffer === bufferArray[0]) {
-        buffer = symbol + buffer;
-        bufferArray.unshift(symbol);
-      }
+      } 
 
       savedNumber = ''
       console.log("buffer at end", buffer);
@@ -165,7 +162,11 @@ function handleNumber(number) {
   console.log("savedNumber before handle#", savedNumber);
   console.log('bufferArray in saved#', bufferArray);
 
-  if (number === '.' && savedNumber.includes('.') || number === '.' && bufferArray[bufferArray.length - 1] == "^") {
+  if (
+    (number === '.' && savedNumber.includes('.')) || 
+    (number === '.' && bufferArray[bufferArray.length - 1] == "^") ||
+    (savedNumber == '' && bufferArray[bufferArray.length - 1] == "!")
+    ) {
     return;
   }
 
@@ -361,16 +362,17 @@ function preventSymbols(symbol) {
     }
   }
 
-  if (symbol == "+" || symbol == "-" || symbol == "/" || symbol == "*" || symbol == 'Backspace') {
+  if (symbol == "+" || symbol == "-" || symbol == "/" || symbol == "*" || symbol == 'Backspace' ) {
     if (
       buffer == "0" ||
       buffer == "" ||
-      bufferArray[bufferArray.length - 1] == "+" ||
-      bufferArray[bufferArray.length - 1] == "-" ||
-      bufferArray[bufferArray.length - 1] == "/" ||
-      bufferArray[bufferArray.length - 1] == "*" ||
-      bufferArray[bufferArray.length - 1] == "^" ||
-      bufferArray[bufferArray.length - 1] == "!" 
+      (savedNumber == "" && bufferArray[bufferArray.length - 1] == "^") ||
+      (savedNumber == "" && bufferArray[bufferArray.length - 1] == "+") ||
+      (savedNumber == "" && bufferArray[bufferArray.length - 1] == "/") ||
+      (savedNumber == "" && bufferArray[bufferArray.length - 1] == "*") ||
+      (savedNumber == "" && bufferArray[bufferArray.length - 1] == "-") ||
+      (savedNumber == "" && bufferArray[bufferArray.length - 1] == "√") ||
+      (savedNumber != "" && bufferArray[bufferArray.length - 1] == "!")
     ) {
       return true;
     } else {
@@ -382,18 +384,18 @@ function preventSymbols(symbol) {
     if (
       buffer == "0" ||
       buffer == "" ||
-      bufferArray[bufferArray.length - 1] == "+" ||
-      bufferArray[bufferArray.length - 1] == "-" ||
-      bufferArray[bufferArray.length - 1] == "/" ||
-      bufferArray[bufferArray.length - 1] == "*" ||
-      bufferArray[bufferArray.length - 1] == "^" ||
-      bufferArray[bufferArray.length - 1] == "√"
-      ) {
-        return true;
-      } else {
-        return false;
-      }
+      (savedNumber == "" && bufferArray[bufferArray.length - 1] == "+") ||
+      (savedNumber == "" && bufferArray[bufferArray.length - 1] == "-") ||
+      (savedNumber == "" && bufferArray[bufferArray.length - 1] == "/") ||
+      (savedNumber == "" && bufferArray[bufferArray.length - 1] == "*") ||
+      (savedNumber == "" && bufferArray[bufferArray.length - 1] == "√") ||
+      bufferArray[bufferArray.length - 1] == "^"
+    ) {
+      return true;
+    } else {
+      return false;
     }
+  };
     
     if (symbol == "!") {
       
@@ -401,22 +403,17 @@ function preventSymbols(symbol) {
         buffer == "0" ||
         buffer == "" ||
         bufferArray[bufferArray.length - 1] == "!" ||
-        bufferArray[bufferArray.length - 1] == "√" ||
-        savedNumber == '' &&
-        bufferArray[bufferArray.length - 1] == "^" ||
-        savedNumber == '' &&
-        bufferArray[bufferArray.length - 1] == "+" ||
-        savedNumber == '' &&
-        bufferArray[bufferArray.length - 1] == "/" ||
-        savedNumber == '' &&
-        bufferArray[bufferArray.length - 1] == "*" ||
-        savedNumber == '' &&
-        bufferArray[bufferArray.length - 1] == "-"
-        ) {
-          return true;
-        } else {
-          return false;
-        }
+        (savedNumber == "" && bufferArray[bufferArray.length - 1] == "√") ||
+        (savedNumber == "" && bufferArray[bufferArray.length - 1] == "^") ||
+        (savedNumber == "" && bufferArray[bufferArray.length - 1] == "+") ||
+        (savedNumber == "" && bufferArray[bufferArray.length - 1] == "/") ||
+        (savedNumber == "" && bufferArray[bufferArray.length - 1] == "*") ||
+        (savedNumber == "" && bufferArray[bufferArray.length - 1] == "-")
+      ) {
+        return true;
+      } else {
+        return false;
+      }
       }
       
 
