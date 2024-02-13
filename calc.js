@@ -528,16 +528,11 @@ function backspaceBuffer(symbol) {
 function backspaceArray() {
 
   if (bufferArray[0] == undefined  || savedNumber != '') {
-    // console.log('savedNumber in backspaceArray', savedNumber)
     return;
   }
 
-  // console.log('In backspaceArray');
-  // console.log(parseInt((bufferArray[bufferArray.length - 1])));
-
   if (parseInt((bufferArray[bufferArray.length - 1])) == NaN) {
 
-    // console.log(bufferArray.pop());
   } else {
 
     savedNumber = bufferArray.pop();
@@ -550,11 +545,6 @@ function backspaceSavedNumber() {
     return
   } else {
     savedNumber = savedNumber.substring(0, savedNumber.length - 1)
-    // if ( savedNumber.includes('^') ) {
-    //   carrot = true;
-    // } else {
-    //   carrot = false;
-    // }
   }
 };
 
@@ -562,6 +552,5 @@ function backspaceSavedNumber() {
 function pushSavedNumber() {
   if (savedNumber.length > 0 && savedNumber != '') {
     bufferArray.push(savedNumber);
-    // carrot = false;
   }
 };
