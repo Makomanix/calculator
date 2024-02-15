@@ -130,7 +130,6 @@ function handleSymbol(symbol){
       pushSavedNumber();
       bufferArray.push(symbol);
       savedNumber = ''
-      // carrot = true;
       break;
 
     case "√":
@@ -217,23 +216,33 @@ function handleCommas() {
       let commaArray = item.split('')
       let tail;
       let head;
+      let radical;
+      let carrot;
 
-      if (commaArray.includes('√'))
+      if (commaArray.includes('√')) {
+        radical = commaArray.indexOf('√');
+        if (radical == 0){
+        head = commaArray.shift();
+        console.log("head", head);
+        console.log("commaArray", commaArray);
+        }
+      }
 
       if (commaArray.includes('^')) {
-        let carrot = commaArray.indexOf('^')
+        carrot = commaArray.indexOf('^')
         tail = commaArray.slice(carrot);
         commaArray = commaArray.slice(0, carrot);
-        // console.log("commaArray", commaArray);
-        // console.log("carrot", carrot);
+        console.log("commaArray", commaArray);
+        console.log("carrot", carrot);
+        console.log('tail', tail);
       };
 
 
-      for ( let j = commaArray.length - 1 ; j >= 0 ; j-- ){
+      for ( let j = commaArray.length - 1 ; j >= 1 ; j-- ){
         if (isNaN(commaArray[j])){
           console.log("J",j);
           if (commaArray[j] == '√') {
-            count--;
+            // count--;
           }
           continue;
         }
@@ -252,9 +261,9 @@ function handleCommas() {
   }
 }
 
-// function handleCommasSymbols(array) {
+function handleCommasSymbols(array) {
 
-// }
+}
 
 
 function doOperations(array) {
@@ -471,8 +480,8 @@ function rerender() {
     buffer = "Self Destruct Initiated"
   }
 
-  handleCommas();
-    
+  // handleCommas();
+    console.log(bufferArray);
   solution.innerText = buffer;
   equation.innerText = memory;
 
