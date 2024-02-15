@@ -3,7 +3,7 @@ let memory = '';
 let bufferArray = [];
 let savedNumber = ''
 let onOff = false;
-// let carrot = false;
+
 
 
 const buttonValues = document.querySelectorAll("button");
@@ -77,6 +77,7 @@ function handleSymbol(symbol){
         doOperations(bufferArray);
         buffer = bufferArray[0];
         savedNumber = "";
+        
       }
       break;
 
@@ -160,29 +161,34 @@ function handleSymbol(symbol){
 function handleNumber(number) {
 
   console.log("savedNumber before handle#", savedNumber);
-  console.log('bufferArray in saved#', bufferArray);
-
+  console.log('bufferArray in handle#', bufferArray);
+  
   if (
     (number === '.' && savedNumber.includes('.')) || 
     (number === '.' && bufferArray[bufferArray.length - 1] == "^") ||
     (savedNumber == '' && bufferArray[bufferArray.length - 1] == "!")
     ) {
-    return;
-  }
-
-  if (
-    (buffer === bufferArray[0] && buffer !== "√") ||
-    buffer === "0" ||
-    buffer === "Self Destruct Initiated"
-  ) {
-    buffer = number;
-    memory = "";
-    bufferArray = [];
-  } else {
-    buffer += number;
-  }
-  savedNumber += number;
-  console.log('savedNumber after handleNumber',savedNumber);
+      return;
+    }
+    
+    if (
+      
+      (buffer === bufferArray[0] && buffer !== "√") ||
+      buffer === "0" ||
+      buffer === "Self Destruct Initiated"
+      ) {
+        console.log('WTF');
+        buffer = number;
+        memory = "";
+        bufferArray = [];
+      } else {
+        buffer += number;
+      }
+      savedNumber += number;
+      console.log('savedNumber after handleNumber',savedNumber);
+      console.log('bufferArray after handle#', bufferArray);
+      
+      
   
 
   rerender();
@@ -528,7 +534,9 @@ function backspaceArray() {
     return;
   }
 
-  if (parseInt((bufferArray[bufferArray.length - 1])) == NaN) {
+  if (((bufferArray[bufferArray.length - 2])) == undefined) {
+    console.log('WTF');
+    savedNumber = bufferArray[bufferArray.length - 1];
 
   } else {
 
