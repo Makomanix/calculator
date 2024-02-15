@@ -172,8 +172,7 @@ function handleNumber(number) {
     }
     
     if (
-      
-      (buffer === bufferArray[0] && buffer !== "√") ||
+      (bufferArray == [] && buffer !== "√") ||
       buffer === "0" ||
       buffer === "Self Destruct Initiated"
       ) {
@@ -451,6 +450,8 @@ function rerender() {
   solution.innerText = buffer;
   equation.innerText = memory;
 
+  console.log(savedNumber);
+
 };
 
 
@@ -529,23 +530,26 @@ function backspaceBuffer(symbol) {
 
 
 function backspaceArray() {
+  console.log('am i here');
 
   if (bufferArray[0] == undefined  || savedNumber != '') {
     return;
   }
 
-  if (((bufferArray[bufferArray.length - 2])) == undefined) {
+  if (bufferArray.length == 1) {
     console.log('WTF');
-    savedNumber = bufferArray[bufferArray.length - 1];
-
+    // savedNumber = bufferArray[bufferArray.length - 1];
+    savedNumber = bufferArray.pop();
   } else {
 
     savedNumber = bufferArray.pop();
-  } 
+  }
+  console.log("savedNumber", savedNumber); 
 };
 
 
 function backspaceSavedNumber() {
+  console.log(bufferArray);
   if (savedNumber == '') {
     return
   } else {
@@ -555,6 +559,12 @@ function backspaceSavedNumber() {
 
 
 function pushSavedNumber() {
+  if (!(isNaN(parseInt(bufferArray[bufferArray.length - 1]))) && bufferArray.length > 0) {
+    let currentNumber = bufferArray.pop();
+    savedNumber = currentNumber += savedNumber;
+    console.log(savedNumber);
+  }
+
   if (savedNumber.length > 0 && savedNumber != '') {
     bufferArray.push(savedNumber);
   }
