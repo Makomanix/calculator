@@ -14,4 +14,9 @@ functional calculator
 
 - Then each pair of numbers and their operator will be evaluated, creating a "running total" variable.
 
-- The completed evaluation of the array will be displayed as the solution on screen and 
+- The completed evaluation of the array will be displayed as the solution on screen and
+
+Currently Working on:
+
+handleComma();
+-Current during the render process the buffer is turned into an array of items split on spaces. The items are 
