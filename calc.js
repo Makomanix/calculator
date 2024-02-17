@@ -222,7 +222,7 @@ function handleCommas() {
       if (commaArray.includes('√')) {
         radical = commaArray.indexOf('√');
         if (radical == 0){
-        head = commaArray.shift();
+        head = [commaArray.shift()];
         console.log("head", head);
         console.log("commaArray", commaArray);
         }
@@ -254,6 +254,7 @@ function handleCommas() {
             commaArray.splice(j, 0, ',');
           }
         console.log('commaArray', commaArray);
+        console.log(head.concat(commaArray));
       }
       
     }
@@ -392,12 +393,13 @@ function preventSymbols(symbol) {
   
   if (symbol == "√") {
     if (
+      bufferArray[bufferArray.length - 1] == "^" ||
       bufferArray[bufferArray.length - 1] == "!" ||
       bufferArray[bufferArray.length - 1] == "√"
     ) {
       return true;
     } else {
-      console.log(" ", symbol)
+      console.log(" ", symbol);
       return false;
     }
   }
@@ -429,7 +431,9 @@ function preventSymbols(symbol) {
       (savedNumber == "" && bufferArray[bufferArray.length - 1] == "/") ||
       (savedNumber == "" && bufferArray[bufferArray.length - 1] == "*") ||
       (savedNumber == "" && bufferArray[bufferArray.length - 1] == "√") ||
-      bufferArray[bufferArray.length - 1] == "^"
+      bufferArray[bufferArray.length - 1] == "^" ||
+      bufferArray[bufferArray.length - 2] == "^" ||
+      (savedNumber == "" && bufferArray[bufferArray.length - 3] == "^") 
     ) {
       return true;
     } else {
@@ -480,8 +484,9 @@ function rerender() {
     buffer = "Self Destruct Initiated"
   }
 
-  // handleCommas();
+  handleCommas();
     console.log(bufferArray);
+    console.log(buffer);
   solution.innerText = buffer;
   equation.innerText = memory;
 
