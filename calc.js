@@ -183,88 +183,49 @@ function handleNumber(number) {
       } else {
         buffer += number;
       }
-      savedNumber += number;
-      // console.log('savedNumber after handleNumber',savedNumber);
-      // console.log('bufferArray after handle#', bufferArray);
-      
-      
-  
+      savedNumber += number; 
 
   rerender();
 };
 
 function handleCommas() {
-  let prettyBuffer;
-  let prettyMemory;
-  let wholeNumber = buffer;
-  let decimal;
-  let count = 0;
-  let commalessArray = wholeNumber.split(' ');
 
-  console.log('commalessArray', commalessArray);
+  let string = buffer;
+  let commalessArray = string.split(' ');
+
   for (let i = 0; i < commalessArray.length; i++) {
-    let item = commalessArray[i];
+    commalessArray[i];
 
-    if ( item.includes('.') ) {
-      item = item.split('.')[0];
-    }
+    if (commalessArray[i].includes(".")) {
 
-    console.log("item", item);
+      let items = commalessArray[i].split(".");
 
-    if ( item.length > 3) {
-      let count = 0
-      let commaArray = item.split('')
-      let tail;
-      let head;
-      let radical;
-      let carrot;
+      let head = items[0].replace(/-{0,1}\d{1,3}(?=(\d{3})+(?!\d))/g, "$&,");
 
-      if (commaArray.includes('√')) {
-        radical = commaArray.indexOf('√');
-        if (radical == 0){
-        head = [commaArray.shift()];
-        console.log("head", head);
-        console.log("commaArray", commaArray);
-        }
+      let tail = items[1];
+
+      commalessArray[i] = head.concat(".").concat(tail);
+
+      if (commalessArray[i].includes("^")) {
+
+        items = commalessArray[i].split("^");
+
+        head = items[0];
+
+        tail = items[1].replace(/-{0,1}\d{1,3}(?=(\d{3})+(?!\d))/g, "$&,");
+
+        commalessArray[i] = head.concat("^").concat(tail);
       }
 
-      if (commaArray.includes('^')) {
-        carrot = commaArray.indexOf('^')
-        tail = commaArray.slice(carrot);
-        commaArray = commaArray.slice(0, carrot);
-        console.log("commaArray", commaArray);
-        console.log("carrot", carrot);
-        console.log('tail', tail);
-      };
+    } else {
 
-
-      for ( let j = commaArray.length - 1 ; j >= 1 ; j-- ){
-        if (isNaN(commaArray[j])){
-          console.log("J",j);
-          if (commaArray[j] == '√') {
-            // count--;
-          }
-          continue;
-        }
-
-        console.log(parseInt(commaArray[j]));
-          count ++;
-          if ( count % 3 === 0 ) {
-            // console.log("HELP");
-            commaArray.splice(j, 0, ',');
-          }
-        console.log('commaArray', commaArray);
-        console.log(head.concat(commaArray));
-      }
-      
+      commalessArray[i] = commalessArray[i].replace(/-{0,1}\d{1,3}(?=(\d{3})+(?!\d))/g,"$&,");
     }
-    commalessArray.join()
   }
-}
 
-function handleCommasSymbols(array) {
-
-}
+  string = commalessArray.join(" ");
+  buffer = string;
+};
 
 
 function doOperations(array) {
@@ -485,8 +446,8 @@ function rerender() {
   }
 
   handleCommas();
-    console.log(bufferArray);
-    console.log(buffer);
+    // console.log(bufferArray);
+    // console.log(buffer);
   solution.innerText = buffer;
   equation.innerText = memory;
 
@@ -546,6 +507,8 @@ function backspaceSavedNumber() {
 
 
 function pushSavedNumber() {
+
+  console.log(savedNumber);
 
   if (!(isNaN(parseInt(bufferArray[bufferArray.length - 1])))) {
     let currentNumber = bufferArray.pop();
