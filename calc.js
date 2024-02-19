@@ -149,8 +149,6 @@ function handleSymbol(symbol){
       } 
 
       savedNumber = ''
-      // console.log("buffer at end", buffer);
-      // console.log('bufferArray at end', bufferArray);
       break;
   }
 
@@ -419,9 +417,7 @@ function preventSymbols(symbol) {
       } else {
         return false;
       }
-      }
-      
-
+    }
 }
 
 
@@ -446,11 +442,8 @@ function rerender() {
   }
 
   handleCommas();
-    // console.log(bufferArray);
-    // console.log(buffer);
   solution.innerText = buffer;
   equation.innerText = memory;
-
 };
 
 
