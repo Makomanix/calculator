@@ -448,13 +448,14 @@ function preventSymbols(symbol) {
       if (
         buffer == "0" ||
         buffer == "" ||
+        savedNumber.includes('.') ||
         bufferArray[bufferArray.length - 1] == "!" ||
         (savedNumber == "" && bufferArray[bufferArray.length - 1] == "√") ||
         (savedNumber == "" && bufferArray[bufferArray.length - 1] == "^") ||
         (savedNumber == "" && bufferArray[bufferArray.length - 1] == "+") ||
         (savedNumber == "" && bufferArray[bufferArray.length - 1] == "/") ||
         (savedNumber == "" && bufferArray[bufferArray.length - 1] == "*") ||
-        (savedNumber == "" && bufferArray[bufferArray.length - 1] == "-")
+        (savedNumber == "" && bufferArray[bufferArray.length - 1] == "-") 
       ) {
         return true;
       } else {
