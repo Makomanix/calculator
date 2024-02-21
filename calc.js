@@ -190,30 +190,31 @@ function handleCommas() {
 
   let string = buffer;
   let commalessArray = string.split(' ');
-  console.log('commalessArray', commalessArray);
 
   for (let i = 0; i < commalessArray.length; i++) {
     if (commalessArray[i].length > 3) {
-      console.log("commaslessArray[i]", commalessArray[i]);
+
       let items = commalessArray[i].split('');
       let body = items;
-      let radical = [];
+      let radical = false;
+      // let bodyFactorial = false;
+      // let capFactorial = false;
       let carrot;
       let decimal;
       let tail;
       let cap;
 
-      console.log("body before if's", body);
-
-
       if (items.includes('√')) {
-        radical[0] = items.shift();
+        items.shift();
+        radical = true;
       }
+
+      // if (body.includes)
 
       if (items.includes('.')) {
         decimal = items.indexOf('.');
         body = items.slice(0, decimal);
-        tail = items.slice(decimal + 1);
+        tail = items.slice(decimal);
       }
 
       if (items.includes('^')) {
@@ -221,8 +222,7 @@ function handleCommas() {
         cap = items.slice(carrot + 1)
         if (items.includes(".")) {
           decimal = items.indexOf(".");
-          body = items.slice(0, decimal);
-          tail = items.slice(decimal + 1, carrot);
+          tail = items.slice(decimal, carrot);
           cap = addCommas(cap);
         } else {
         body = items.slice(0, carrot);
@@ -231,37 +231,40 @@ function handleCommas() {
       }
 
       body = addCommas(body);
-      // radical ? body = radical.concat(body) : null
-      // console.log('body', body);
+      radical ? body.unshift('√') : null
+      body = body.join('')
       
-      // tail ? console.log('tail', tail.join('')) : null;
-      // cap ? console.log("cap", cap.join("")) : null;
-
-      // body = body.join('')
+      if (tail) {  
+        tail = tail.join('');
+        body += tail;
+      } 
       
-
-
+      if (cap) {
+        cap = cap.join('');
+        cap = "^" + cap ;
+        body += cap;
+      }
+      
       commalessArray[i] = body;
-      console.log(commalessArray[i]);
     }
+
     commalessArray.join('')
   }
 
-  string = commalessArray.join(" ");
-  console.log('string', string);
+  return string = commalessArray.join(" ");
 };
 
 function addCommas(array) {
-  console.log(array);
   let count = 0;
 
   for (let i = array.length - 1; i > 0; i--) {
     count++;
+
     if (count % 3 === 0) {
       array.splice(i, 0, ",")
     }
   }
-  console.log(array);
+
   return array;
 }
 
@@ -481,9 +484,12 @@ function rerender() {
     buffer = "Self Destruct Initiated"
   }  
   
-  let prettybuffer = handleCommas();
+  let prettyBuffer = handleCommas();
 
-  solution.innerText = buffer;
+  prettyBuffer = null ? 
+    solution.innerText = buffer : 
+    solution.innerText = prettyBuffer;
+
   equation.innerText = memory;
 };
 
