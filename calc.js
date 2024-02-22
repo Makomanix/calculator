@@ -4,8 +4,6 @@ let bufferArray = [];
 let savedNumber = ''
 let onOff = false;
 
-
-
 const buttonValues = document.querySelectorAll("button");
 
 let buttonValueArray = Array.from(buttonValues).map((button) => {
@@ -18,9 +16,11 @@ function handleClick(e){
   e.target.blur();
 };
 
+
 function handlePress(e) {
   handleButton(e.key);
 };
+
 
 function handleButton(value) {
   if ( isNaN(parseInt(value)) && value != '.' ) {
@@ -68,16 +68,15 @@ function handleSymbol(symbol){
         buffer == "" ||
         buffer === "Self Destruct Initiated"
       ) {
-        return;
 
+        return;
       } else {
 
         pushSavedNumber();
-        memory = buffer + " =";
+        memory = handleCommas(buffer) + "="
         doOperations(bufferArray);
         buffer = bufferArray[0];
-        savedNumber = "";
-        
+        savedNumber = "";       
       }
       break;
 
@@ -115,8 +114,7 @@ function handleSymbol(symbol){
         preventSymbols(symbol)
       ) {
         return;
-      };
-
+      }
       
       if (bufferArray[bufferArray.length - 1] == "!") {
 
@@ -157,9 +155,6 @@ function handleSymbol(symbol){
 
 
 function handleNumber(number) {
-
-  // console.log("savedNumber before handle#", savedNumber);
-  // console.log('bufferArray in handle#', bufferArray);
   
   if (
     (number === '.' && savedNumber.includes('.')) || 
@@ -186,9 +181,14 @@ function handleNumber(number) {
   rerender();
 };
 
-function handleCommas() {
 
-  let string = buffer;
+function handleCommas(array) {
+
+  if (array.includes('S')) {
+    return array;
+  };
+  
+  let string = array;
   let commalessArray = string.split(' ');
 
   for (let i = 0; i < commalessArray.length; i++) {
@@ -197,19 +197,24 @@ function handleCommas() {
       let items = commalessArray[i].split('');
       let body = items;
       let radical = false;
-      // let bodyFactorial = false;
-      // let capFactorial = false;
-      let carrot;
+      let bodyFactorial = false;
+      let capFactorial = false;
       let decimal;
       let tail;
       let cap;
-
+      
       if (items.includes('√')) {
         items.shift();
         radical = true;
       }
+      
+      let factorial = items.indexOf("!");
+      let carrot = items.indexOf ("^");
 
-      // if (body.includes)
+      if (items.includes("!")) {
+        body = items.slice(0, factorial);
+        bodyFactorial = true;
+      }
 
       if (items.includes('.')) {
         decimal = items.indexOf('.');
@@ -218,21 +223,31 @@ function handleCommas() {
       }
 
       if (items.includes('^')) {
-        carrot = items.indexOf('^');
         cap = items.slice(carrot + 1)
+        
+        if (cap.includes('!')) {
+          cap.pop();
+          capFactorial = true;
+        }
+
         if (items.includes(".")) {
           decimal = items.indexOf(".");
           tail = items.slice(decimal, carrot);
           cap = addCommas(cap);
         } else {
-        body = items.slice(0, carrot);
-        cap = addCommas(cap);
+          if (bodyFactorial) {
+            body = items.slice(0, carrot - 1);
+          } else {
+          body = items.slice(0, carrot);
+          }
+          cap = addCommas(cap);
         }
       }
 
       body = addCommas(body);
-      radical ? body.unshift('√') : null
-      body = body.join('')
+      radical ? body.unshift('√') : null;
+      bodyFactorial ? body.push('!') : null;
+      body = body.join('');
       
       if (tail) {  
         tail = tail.join('');
@@ -240,19 +255,21 @@ function handleCommas() {
       } 
       
       if (cap) {
+        if (capFactorial) {
+          cap.push('!');
+        }
         cap = cap.join('');
         cap = "^" + cap ;
         body += cap;
       }
       
       commalessArray[i] = body;
+
     }
-
-    commalessArray.join('')
   }
-
   return string = commalessArray.join(" ");
 };
+
 
 function addCommas(array) {
   let count = 0;
@@ -277,6 +294,7 @@ function doOperations(array) {
   addAndSubtract(array);  
 } 
 
+
 function factorials(array) {
   let factorial = array.indexOf('!');
 
@@ -292,6 +310,7 @@ function factorials(array) {
     factorial = array.indexOf('!')
   }
 };
+
 
 function exponents(array) {
   let exponent = array.indexOf('^');
@@ -321,7 +340,6 @@ function squareRoot(array) {
     radical = array.indexOf('√');
   }
 };
-
 
 
 function divideAndMultiply(array) {
@@ -355,17 +373,18 @@ function addAndSubtract(array) {
 function orderOperations(array, operand1, operand2, symbol) {
   let answer;
   
-  if ((operand1 < operand2 && operand1 >= 0) || operand2 < 0) {
-    let formula = array.slice(operand1 - 1, operand1 + 2);
-      if (symbol == "divide") {
+  if ((operand1 < operand2 && operand1 >= 0) 
+    || operand2 < 0) {
+      let formula = array.slice(operand1 - 1, operand1 + 2);
+        if (symbol == "divide") {
 
-    answer = formula[0] / formula[2];
-    answer = answer.toString();
-      } else {
+          answer = formula[0] / formula[2];
+          answer = answer.toString();
+        } else {
 
-        answer = formula[0] - formula[2];
-        answer = answer.toString();
-      }
+          answer = formula[0] - formula[2];
+          answer = answer.toString();
+        }
     
     array.splice(operand1 - 1, 3, answer);
     
@@ -374,8 +393,8 @@ function orderOperations(array, operand1, operand2, symbol) {
     let formula = array.slice(operand2 - 1, operand2 + 2);
 
     if (symbol == "divide") {
-    answer = (parseFloat(formula[0])) * (parseFloat(formula[2]));
-    answer = answer.toString();
+      answer = (parseFloat(formula[0])) * (parseFloat(formula[2]));
+      answer = answer.toString();
 
     } else if (symbol == 'minus'){
       answer = (parseFloat(formula[0]) + parseFloat(formula[2]))
@@ -395,28 +414,34 @@ function preventSymbols(symbol) {
   
   if (symbol == "√") {
     if (
-      bufferArray[bufferArray.length - 1] == "^" ||
-      bufferArray[bufferArray.length - 1] == "!" ||
-      bufferArray[bufferArray.length - 1] == "√"
+      bufferArray[bufferArray.length - 1] == "^" 
+      || bufferArray[bufferArray.length - 1] == "!" 
+      || bufferArray[bufferArray.length - 1] == "√"
     ) {
       return true;
     } else {
-      console.log(" ", symbol);
       return false;
     }
   }
 
-  if (symbol == "+" || symbol == "-" || symbol == "/" || symbol == "*" || symbol == 'Backspace' ) {
+  if (
+    symbol == "+" 
+    || symbol == "-" 
+    || symbol == "/" 
+    || symbol == "*" 
+    || symbol == 'Backspace' 
+  ) {
+
     if (
-      buffer == "0" ||
-      buffer == "" ||
-      (savedNumber == "" && bufferArray[bufferArray.length - 1] == "^") ||
-      (savedNumber == "" && bufferArray[bufferArray.length - 1] == "+") ||
-      (savedNumber == "" && bufferArray[bufferArray.length - 1] == "/") ||
-      (savedNumber == "" && bufferArray[bufferArray.length - 1] == "*") ||
-      (savedNumber == "" && bufferArray[bufferArray.length - 1] == "-") ||
-      (savedNumber == "" && bufferArray[bufferArray.length - 1] == "√") ||
-      (savedNumber != "" && bufferArray[bufferArray.length - 1] == "!")
+      buffer == "0" 
+      || buffer == "" 
+      || (savedNumber == "" && bufferArray[bufferArray.length - 1] == "^") 
+      || (savedNumber == "" && bufferArray[bufferArray.length - 1] == "+") 
+      || (savedNumber == "" && bufferArray[bufferArray.length - 1] == "/") 
+      || (savedNumber == "" && bufferArray[bufferArray.length - 1] == "*") 
+      || (savedNumber == "" && bufferArray[bufferArray.length - 1] == "-") 
+      || (savedNumber == "" && bufferArray[bufferArray.length - 1] == "√") 
+      || (savedNumber != "" && bufferArray[bufferArray.length - 1] == "!")
     ) {
       return true;
     } else {
@@ -426,16 +451,16 @@ function preventSymbols(symbol) {
   
   if (symbol == "^") {
     if (
-      buffer == "0" ||
-      buffer == "" ||
-      (savedNumber == "" && bufferArray[bufferArray.length - 1] == "+") ||
-      (savedNumber == "" && bufferArray[bufferArray.length - 1] == "-") ||
-      (savedNumber == "" && bufferArray[bufferArray.length - 1] == "/") ||
-      (savedNumber == "" && bufferArray[bufferArray.length - 1] == "*") ||
-      (savedNumber == "" && bufferArray[bufferArray.length - 1] == "√") ||
-      bufferArray[bufferArray.length - 1] == "^" ||
-      bufferArray[bufferArray.length - 2] == "^" ||
-      (savedNumber == "" && bufferArray[bufferArray.length - 3] == "^") 
+      buffer == "0" 
+      || buffer == "" 
+      || (savedNumber == "" && bufferArray[bufferArray.length - 1] == "+") 
+      || (savedNumber == "" && bufferArray[bufferArray.length - 1] == "-") 
+      || (savedNumber == "" && bufferArray[bufferArray.length - 1] == "/") 
+      || (savedNumber == "" && bufferArray[bufferArray.length - 1] == "*") 
+      || (savedNumber == "" && bufferArray[bufferArray.length - 1] == "√") 
+      || bufferArray[bufferArray.length - 1] == "^" 
+      || bufferArray[bufferArray.length - 2] == "^" 
+      || (savedNumber == "" && bufferArray[bufferArray.length - 3] == "^") 
     ) {
       return true;
     } else {
@@ -446,16 +471,16 @@ function preventSymbols(symbol) {
     if (symbol == "!") {
       
       if (
-        buffer == "0" ||
-        buffer == "" ||
-        savedNumber.includes('.') ||
-        bufferArray[bufferArray.length - 1] == "!" ||
-        (savedNumber == "" && bufferArray[bufferArray.length - 1] == "√") ||
-        (savedNumber == "" && bufferArray[bufferArray.length - 1] == "^") ||
-        (savedNumber == "" && bufferArray[bufferArray.length - 1] == "+") ||
-        (savedNumber == "" && bufferArray[bufferArray.length - 1] == "/") ||
-        (savedNumber == "" && bufferArray[bufferArray.length - 1] == "*") ||
-        (savedNumber == "" && bufferArray[bufferArray.length - 1] == "-") 
+        buffer == "0" 
+        || buffer == "" 
+        || savedNumber.includes('.') 
+        || bufferArray[bufferArray.length - 1] == "!" 
+        || (savedNumber == "" && bufferArray[bufferArray.length - 1] == "√") 
+        || (savedNumber == "" && bufferArray[bufferArray.length - 1] == "^") 
+        || (savedNumber == "" && bufferArray[bufferArray.length - 1] == "+") 
+        || (savedNumber == "" && bufferArray[bufferArray.length - 1] == "/") 
+        || (savedNumber == "" && bufferArray[bufferArray.length - 1] == "*") 
+        || (savedNumber == "" && bufferArray[bufferArray.length - 1] == "-") 
       ) {
         return true;
       } else {
@@ -485,7 +510,7 @@ function rerender() {
     buffer = "Self Destruct Initiated"
   }  
   
-  let prettyBuffer = handleCommas();
+  let prettyBuffer = handleCommas(buffer);
 
   prettyBuffer = null ? 
     solution.innerText = buffer : 
@@ -507,17 +532,17 @@ function backspaceBuffer(symbol) {
     return;
   };
 
-  if (preventSymbols(symbol) &&
-    bufferArray[bufferArray.length - 1] != "√" &&
-    bufferArray[bufferArray.length - 1] != "!" &&
-    bufferArray[bufferArray.length - 1] != "^" ) {
+  if (preventSymbols(symbol) 
+  && bufferArray[bufferArray.length - 1] != "√" 
+  && bufferArray[bufferArray.length - 1] != "!" 
+  && bufferArray[bufferArray.length - 1] != "^" ) {
       
       buffer = buffer.substring(0, buffer.length - 3);
       return;  
   };
     
-  if (buffer.substring(buffer.length - 2, buffer.length - 1) == "!" &&
-    buffer.substring(buffer.length - 1, buffer.length) != '^') {
+  if (buffer.substring(buffer.length - 2, buffer.length - 1) == "!" 
+  && buffer.substring(buffer.length - 1, buffer.length) != '^') {
 
       buffer = buffer.substring(0, buffer.length - 2);
       return;
@@ -530,6 +555,7 @@ function backspaceBuffer(symbol) {
 function backspaceArray() {
 
   if (bufferArray[0] == undefined  || savedNumber != '') {
+
     return;
   }
 
@@ -540,8 +566,10 @@ function backspaceArray() {
 function backspaceSavedNumber() {
 
   if (savedNumber == '') {
-    return
+    return;
+
   } else {
+
     savedNumber = savedNumber.substring(0, savedNumber.length - 1)
   }
 };
@@ -549,9 +577,8 @@ function backspaceSavedNumber() {
 
 function pushSavedNumber() {
 
-  console.log(savedNumber);
-
   if (!(isNaN(parseInt(bufferArray[bufferArray.length - 1])))) {
+
     let currentNumber = bufferArray.pop();
     savedNumber = currentNumber += savedNumber;
   }
