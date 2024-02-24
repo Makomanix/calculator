@@ -73,7 +73,7 @@ function handleSymbol(symbol){
       } else {
 
         pushSavedNumber();
-        memory = handleCommas(buffer) + "="
+        memory = handleCommas(buffer) + " ="
         doOperations(bufferArray);
         buffer = bufferArray[0];
         savedNumber = "";       
@@ -155,6 +155,13 @@ function handleSymbol(symbol){
 
 
 function handleNumber(number) {
+
+  if (savedNumber.includes('.')) {
+    let decimal = savedNumber.indexOf('.');
+    if (savedNumber.slice(decimal).length > 4) {
+      return;
+    }
+  }
   
   if (
     (number === '.' && savedNumber.includes('.')) || 
