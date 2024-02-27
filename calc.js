@@ -155,13 +155,6 @@ function handleSymbol(symbol){
 
 
 function handleNumber(number) {
-
-  if (savedNumber.includes('.')) {
-    let decimal = savedNumber.indexOf('.');
-    if (savedNumber.slice(decimal).length > 4) {
-      return;
-    }
-  }
   
   if (
     (number === '.' && savedNumber.includes('.')) || 
@@ -499,9 +492,7 @@ function preventSymbols(symbol) {
 
 function rerender() {
   const solution = document.querySelector('.solution');
-  // max length 15
   const equation = document.querySelector('.equation');
-  // max length 30
 
   if (onOff == false) {
     buffer = '';
@@ -515,7 +506,10 @@ function rerender() {
 
   if (buffer === 'Infinity') {
     buffer = "Self Destruct Initiated"
-  }  
+  }
+  
+  resizeText(solution, buffer);
+  resizeText(equation, memory);
   
   let prettyBuffer = handleCommas(buffer);
 
@@ -525,6 +519,24 @@ function rerender() {
 
   equation.innerText = memory;
 };
+
+function resizeText(target, string) {
+  if (string.length < 19) {
+    target.classList.add("normal");
+    target.classList.remove("smaller");
+    target.classList.remove("smallest");
+  }
+
+  if (string.length > 19) {
+    target.classList.add("smaller");
+    target.classList.remove("normal");
+  } 
+
+  if (string.length > 25) {
+    target.classList.add("smallest");
+    target.classList.remove("smaller");
+  }
+}
 
 
 function conditionBackspace(symbol) {
