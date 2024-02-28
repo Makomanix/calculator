@@ -63,10 +63,16 @@ function handleSymbol(symbol){
       break;
 
     case "Enter":
+      console.log(bufferArray[bufferArray.length - 1]);
+      console.log(savedNumber);
       if (
         buffer == "0" ||
         buffer == "" ||
-        buffer === "Self Destruct Initiated"
+        buffer === "Self Destruct Initiated" ||
+        bufferArray[bufferArray.length - 1] == undefined ||
+        (isNaN(bufferArray[bufferArray.length - 1])) &&
+        savedNumber == "" &&
+        bufferArray[bufferArray.length - 1] != '!'
       ) {
 
         return;
