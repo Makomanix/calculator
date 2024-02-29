@@ -1,22 +1,23 @@
 # calculator
-functional calculator
 
-- The calculator is initiated through the power button. 
+This program creates a functional calculator, which can do the following operations: add, subtract, multiply, divide, exponents, factorials, and square roots.
 
-- The calculator has a screen that displays both a solution(bottom numbers) and equation(top numbers) that yielded the solution.  
+The calculator accepts input either by clicking the buttons or pressing the corresponding keys.
+    -The only action that cannot be achieved by keyboard input is square root "√". It must be clicked.
+    -The "Cl" button is bound to delete on the keyboard.
 
-- Add event listener to all buttons for click and keydown.
-    -there are 3 types of buttons, numbers, functions, and operators. 
+To begin using the calculator you must first turn it on by either clicking the Pow button or pressing the P key on your keyboard.
 
-- Each click or keydown will populated the solution with it's value as a string, but also stored as an array of numbers and symbols.
+The "Cl" button will clear the current display and the "←" functions as a backspace removing one character at a time.
 
-- When the enter butter is clicked the equation will be set to the solution string. The solution array will be stepped through and reordered based on the order of operations. 
+Limitations of the calculator include the following:
 
-- Then each pair of numbers and their operator will be evaluated, creating a "running total" variable.
+    -Multiple Exponents cannot be chained together, such as 3^3^3. You would have to process 3^3 hit ENTER/= get an answer of 27 and then press ^3.
 
-- The completed evaluation of the array will be displayed as the solution on screen and
+    -Exponents cannot be decimals. It is mathematically possible to calculate, but goes against mathematical convention.
 
-Currently Working on:
+    -Exponents cannot be square root calculations. Ex: "3^√9".
 
-handleComma();
--Current during the render process the buffer is turned into an array of items split on spaces. The items are 
+    -After hitting ENTER an answer cannot be squared. The square root key must be pressed before a number is typed.
+
+

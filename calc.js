@@ -24,12 +24,15 @@ function handlePress(e) {
 
 function handleButton(value) {
   if ( isNaN(parseInt(value)) && value != '.' ) {
+
     if (checkSymbol(value)) {
       handleSymbol(value);
     } else {
+
       return;
     }
   } else {
+
     handleNumber(value);
   }
 };
@@ -41,7 +44,6 @@ function checkSymbol(symbol) {
 
 
 function handleSymbol(symbol){
-  
   switch (symbol) {
 
     case "Backspace":
@@ -66,13 +68,13 @@ function handleSymbol(symbol){
       console.log(bufferArray[bufferArray.length - 1]);
       console.log(savedNumber);
       if (
-        buffer == "0" ||
-        buffer == "" ||
-        buffer === "Self Destruct Initiated" ||
-        bufferArray[bufferArray.length - 1] == undefined ||
-        (isNaN(bufferArray[bufferArray.length - 1])) &&
-        savedNumber == "" &&
-        bufferArray[bufferArray.length - 1] != '!'
+        buffer == "0" 
+        || buffer == "" 
+        || buffer === "Self Destruct Initiated" 
+        || bufferArray[bufferArray.length - 1] == undefined
+        || (isNaN(bufferArray[bufferArray.length - 1])) 
+          && savedNumber == "" 
+          && bufferArray[bufferArray.length - 1] != '!'
       ) {
 
         return;
@@ -93,6 +95,7 @@ function handleSymbol(symbol){
       if (
         preventSymbols(symbol)
       ) {
+
         return;
       }
 
@@ -119,6 +122,7 @@ function handleSymbol(symbol){
       if (
         preventSymbols(symbol)
       ) {
+
         return;
       }
       
@@ -145,9 +149,11 @@ function handleSymbol(symbol){
       pushSavedNumber();
 
       if (buffer == "0" || buffer == "") {
+                
         buffer = symbol;
         bufferArray.push(symbol);
       } else if (buffer.substring(buffer.length - 1) == " " || buffer.substring(buffer.length - 1) == "^") {
+
         buffer += symbol;
         bufferArray.push(symbol);
       } 
@@ -160,20 +166,20 @@ function handleSymbol(symbol){
 };
 
 
-function handleNumber(number) {
-  
+function handleNumber(number) {  
   if (
-    (number === '.' && savedNumber.includes('.')) || 
-    (number === '.' && bufferArray[bufferArray.length - 1] == "^") ||
-    (savedNumber == '' && bufferArray[bufferArray.length - 1] == "!")
+    (number === '.' && savedNumber.includes('.')) 
+    || (number === '.' && bufferArray[bufferArray.length - 1] == "^") 
+    || (savedNumber == '' && bufferArray[bufferArray.length - 1] == "!")
     ) {
+
       return;
     }
     
     if (
-      (bufferArray == [] && buffer !== "√") ||
-      buffer === "0" ||
-      buffer === "Self Destruct Initiated"
+      (bufferArray == [] && buffer !== "√") 
+      || buffer === "0" 
+      || buffer === "Self Destruct Initiated"
       ) {
 
         buffer = number;
@@ -189,10 +195,10 @@ function handleNumber(number) {
 
 
 function handleCommas(array) {
-
   if (array.includes('S')) {
+
     return array;
-  };
+  }
   
   let string = array;
   let commalessArray = string.split(' ');
@@ -264,13 +270,13 @@ function handleCommas(array) {
         if (capFactorial) {
           cap.push('!');
         }
+
         cap = cap.join('');
         cap = "^" + cap ;
         body += cap;
       }
       
       commalessArray[i] = body;
-
     }
   }
   return string = commalessArray.join(" ");
@@ -289,7 +295,7 @@ function addCommas(array) {
   }
 
   return array;
-}
+};
 
 
 function doOperations(array) {
@@ -298,7 +304,7 @@ function doOperations(array) {
   exponents(array);
   divideAndMultiply(array); 
   addAndSubtract(array);  
-} 
+} ;
 
 
 function factorials(array) {
@@ -338,6 +344,7 @@ function squareRoot(array) {
   let radical = array.indexOf('√');
   
   while (array.includes('√')) {
+
     let number = array[radical + 1]
     let answer = Math.sqrt(number);
     
@@ -381,6 +388,7 @@ function orderOperations(array, operand1, operand2, symbol) {
   
   if ((operand1 < operand2 && operand1 >= 0) 
     || operand2 < 0) {
+
       let formula = array.slice(operand1 - 1, operand1 + 2);
         if (symbol == "divide") {
 
@@ -399,10 +407,12 @@ function orderOperations(array, operand1, operand2, symbol) {
     let formula = array.slice(operand2 - 1, operand2 + 2);
 
     if (symbol == "divide") {
+
       answer = (parseFloat(formula[0])) * (parseFloat(formula[2]));
       answer = answer.toString();
 
     } else if (symbol == 'minus'){
+
       answer = (parseFloat(formula[0]) + parseFloat(formula[2]))
       answer = answer.toString();
     }
@@ -413,7 +423,6 @@ function orderOperations(array, operand1, operand2, symbol) {
 
 
 function preventSymbols(symbol) {
-
   if ( buffer === "Self Destruct Initiated" ) {
     return true;
   }
@@ -501,17 +510,18 @@ function rerender() {
   const equation = document.querySelector('.equation');
 
   if (onOff == false) {
+
     buffer = '';
     memory = '';
     bufferArray = [];
   }  
   
-  if (buffer === '' && onOff == true) {
+  if (buffer === '' && onOff == true) {    
       buffer = '0';
   } 
 
   if (buffer === 'Infinity') {
-    buffer = "Self Destruct Initiated"
+    buffer = "Self Destruct Initiated";
   }
   
   resizeText(solution, buffer);
@@ -528,6 +538,7 @@ function rerender() {
 
 
 function resizeText(target, string) {
+
   if (string.length < 19) {
     target.classList.add("normal");
     target.classList.remove("smaller");
@@ -544,15 +555,14 @@ function resizeText(target, string) {
     target.classList.remove("smaller");
   }
 
-  if (string.length > 35) {
+  if (string.length > 34) {
     target.classList.add("normal");
     target.classList.remove("smaller");
     target.classList.remove("smallest");
     memory = '';
-    buffer = 'Self Destruct Initiated'
+    buffer = 'Self Destruct Initiated';
   }
-
-}
+};
 
 
 function conditionBackspace(symbol) {
@@ -561,8 +571,10 @@ function conditionBackspace(symbol) {
   backspaceSavedNumber();
 };
 
+
 function backspaceBuffer(symbol) {
   if (buffer.length == 1) {
+
     buffer = '0';
     return;
   };
@@ -588,7 +600,6 @@ function backspaceBuffer(symbol) {
 
 
 function backspaceArray() {
-
   if (bufferArray[0] == undefined  || savedNumber != '') {
 
     return;
@@ -599,7 +610,6 @@ function backspaceArray() {
 
 
 function backspaceSavedNumber() {
-
   if (savedNumber == '') {
     return;
 
@@ -611,7 +621,6 @@ function backspaceSavedNumber() {
 
 
 function pushSavedNumber() {
-
   if (!(isNaN(parseInt(bufferArray[bufferArray.length - 1])))) {
 
     let currentNumber = bufferArray.pop();
@@ -619,18 +628,22 @@ function pushSavedNumber() {
   }
   
   if (savedNumber.length > 0 && savedNumber != '') {
+
     bufferArray.push(savedNumber);
   }
 };
 
 
 function toggleOnOff(e) {
-
   if (e.key === "p" || e.target.innerText === 'Pow') {
+
     onOff ? onOff = false : onOff = true;
     if (onOff == true) {
+
       activation(true);
+
     } else {
+
       activation(false);
     }
   }    
@@ -638,19 +651,20 @@ function toggleOnOff(e) {
 
 
 function activation(bool) {
-  
   const buttons = document.querySelector(".buttons-grid");
   
   if (bool == true) {
     
     buttons.addEventListener('click', handleClick);
     document.addEventListener('keydown', handlePress);
+
     rerender();
     
   } else if (bool == false) {
     
     buttons.removeEventListener("click", handleClick);
     document.removeEventListener("keydown", handlePress);
+
     rerender();
     
   }
@@ -658,7 +672,6 @@ function activation(bool) {
 
 
 function init() {
-
   document.addEventListener("keydown", toggleOnOff);
   
   const power = document.querySelector(".power");

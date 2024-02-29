@@ -93,7 +93,7 @@ button:hover {
 }
 
 .power {
-  
+  background-color: rgb(199, 2, 2);
 }
 
 button:nth-child(19) {
@@ -120,10 +120,5 @@ button:nth-child(21) {
 
 .smallest {
   font-size: 1.75rem
-}
-
-
-.hover {
-
 }
 
