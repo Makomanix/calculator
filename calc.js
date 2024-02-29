@@ -526,6 +526,7 @@ function rerender() {
   equation.innerText = memory;
 };
 
+
 function resizeText(target, string) {
   if (string.length < 19) {
     target.classList.add("normal");
@@ -542,6 +543,15 @@ function resizeText(target, string) {
     target.classList.add("smallest");
     target.classList.remove("smaller");
   }
+
+  if (string.length > 35) {
+    target.classList.add("normal");
+    target.classList.remove("smaller");
+    target.classList.remove("smallest");
+    memory = '';
+    buffer = 'Self Destruct Initiated'
+  }
+
 }
 
 
